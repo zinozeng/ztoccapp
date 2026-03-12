@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>移动端经营看板</title>
+    <title>网点经营看板</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
@@ -17,11 +17,8 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             background: #f5f7fa;
             min-height: 100vh;
-            padding-bottom: calc(80px + env(safe-area-inset-bottom));
-            overflow-x: hidden;
         }
 
-        /* 手机容器 */
         .mobile-container {
             max-width: 414px;
             margin: 0 auto;
@@ -41,9 +38,8 @@
 
         .header-top {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            gap: 12px;
         }
 
         .back-btn {
@@ -57,30 +53,38 @@
             padding: 4px;
         }
 
+        .back-btn:active {
+            opacity: 0.6;
+        }
+
         .header-title {
             color: #333;
             font-size: 17px;
             font-weight: 600;
+            flex: 1;
         }
 
         .history-btn {
-            background: #e8f4ff;
+            background: #0066cc;
+            color: white;
             border: none;
-            color: #0066cc;
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 16px;
             font-size: 12px;
             cursor: pointer;
+        }
+
+        .history-btn:active {
+            opacity: 0.8;
         }
 
         /* 标签页导航 */
         .tab-nav {
             display: flex;
-            gap: 16px;
+            gap: 20px;
+            margin-top: 12px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 8px;
             scrollbar-width: none;
         }
 
@@ -89,38 +93,40 @@
         }
 
         .tab-item {
+            padding: 8px 16px;
+            background: #f5f7fa;
+            border-radius: 20px;
+            font-size: 13px;
             color: #666;
-            font-size: 14px;
-            padding: 8px 0;
             white-space: nowrap;
             cursor: pointer;
-            position: relative;
-            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .tab-item:active {
+            opacity: 0.7;
         }
 
         .tab-item.active {
-            color: #0066cc;
-            font-weight: 600;
-        }
-
-        .tab-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -9px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
             background: #0066cc;
-            border-radius: 2px;
+            color: #fff;
         }
 
         /* 主要内容区 */
         .main-content {
-            padding: 12px 16px;
+            padding: 16px;
+            padding-bottom: 80px;
         }
 
-        /* 卡片通用样式 */
+        /* Tab 内容区域 */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .card {
             background: white;
             border-radius: 12px;
@@ -132,7 +138,7 @@
         .section-title {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             margin-bottom: 16px;
         }
 
@@ -149,31 +155,34 @@
             color: #333;
         }
 
-        /* 货量信息 */
+        /* 货量总览 */
         .cargo-total {
             text-align: center;
-            padding: 20px 0;
+            padding: 16px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-radius: 12px;
+            margin-bottom: 16px;
         }
 
         .cargo-value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             color: #0066cc;
         }
 
         .cargo-unit {
             font-size: 14px;
+            font-weight: 500;
             color: #666;
-            margin-left: 4px;
         }
 
         .cargo-label {
-            font-size: 12px;
-            color: #999;
+            font-size: 13px;
+            color: #666;
             margin-top: 4px;
         }
 
-        /* 图表容器 */
+        /* 图表 */
         .chart-box {
             background: white;
             border-radius: 8px;
@@ -186,11 +195,24 @@
             height: 180px;
         }
 
+        .trend-selector {
+            margin-bottom: 12px;
+        }
+
+        .trend-select {
+            padding: 6px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #333;
+            background: white;
+        }
+
         /* 数据网格 */
         .data-grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 16px;
         }
 
@@ -209,22 +231,24 @@
         }
 
         .data-percentage {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
-            color: #333;
+            color: #0066cc;
         }
 
         .data-desc {
-            font-size: 11px;
-            color: #999;
+            font-size: 12px;
+            color: #666;
             margin-top: 4px;
         }
 
         .data-sub-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
+            gap: 8px;
             margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
         }
 
         .data-sub-item {
@@ -243,13 +267,26 @@
             margin-top: 2px;
         }
 
+        .data-sub-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .data-sub-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 趋势标签 */
         .trend-badge {
             display: inline-block;
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 10px;
             font-weight: 600;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .trend-up {
@@ -262,11 +299,11 @@
             color: #52c41a;
         }
 
-        /* 收支信息 */
+        /* 收支网格 */
         .income-expense-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 16px;
         }
 
@@ -285,40 +322,22 @@
         }
 
         .ie-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
             margin-bottom: 8px;
         }
 
         .ie-value {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            color: #333;
+            color: #0066cc;
         }
 
         .ie-trend {
-            font-size: 11px;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
-        /* 收支趋势 */
-        .trend-selector {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 12px;
-        }
-
-        .trend-select {
-            background: #f5f7fa;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            color: #666;
-            cursor: pointer;
-        }
-
-        /* 表格样式 */
+        /* 表格 */
         .data-table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -392,6 +411,117 @@
             opacity: 0.8;
         }
 
+        /* 质量&时效 页面样式 */
+        .quality-section {
+            margin-bottom: 16px;
+        }
+
+        .quality-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .quality-dot {
+            width: 12px;
+            height: 12px;
+            background: #00b8a9;
+            border-radius: 50%;
+        }
+
+        .quality-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .quality-date {
+            font-size: 12px;
+            color: #999;
+            margin-left: auto;
+        }
+
+        .quality-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .quality-card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .quality-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .quality-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .quality-rate {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* 进度条 */
+        .progress-section {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-item {
+            margin-bottom: 12px;
+        }
+
+        .progress-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-bg {
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00b8a9 0%, #00d9c7 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.3s ease;
+        }
+
+        .progress-bar-text {
+            font-size: 11px;
+            color: white;
+            font-weight: 600;
+        }
+
         /* 小屏幕适配 */
         @media (max-width: 375px) {
             .cargo-value {
@@ -413,6 +543,10 @@
             .card {
                 padding: 14px;
             }
+            
+            .quality-value {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -428,186 +562,307 @@
             
             <!-- 标签页导航 -->
             <nav class="tab-nav">
-                <div class="tab-item active">经营数据</div>
-                <div class="tab-item">派费明细</div>
-                <div class="tab-item">发件部网</div>
-                <div class="tab-item">客户达成率</div>
+                <div class="tab-item active" data-tab="business">经营数据</div>
+                <div class="tab-item" data-tab="quality">质量&时效</div>
+                <div class="tab-item" data-tab="send">发件/到件</div>
+                <div class="tab-item" data-tab="customer">客户&风险</div>
             </nav>
         </header>
 
         <!-- 主要内容区 -->
         <main class="main-content">
-            <!-- 货量信息 -->
-            <section class="card">
-                <div class="section-title">
-                    <div class="section-dot"></div>
-                    <span class="section-label">货量信息 (今日)</span>
-                </div>
-                
-                <div class="cargo-total">
-                    <div class="cargo-value">112,239.23<span class="cargo-unit">KG</span></div>
-                    <div class="cargo-label">总货量</div>
-                </div>
-
-                <!-- 货量趋势图表 -->
-                <div class="chart-box">
-                    <div class="chart-container">
-                        <canvas id="cargoChart"></canvas>
+            <!-- 经营数据 Tab -->
+            <div class="tab-content active" id="tab-business">
+                <!-- 货量信息 -->
+                <section class="card">
+                    <div class="section-title">
+                        <div class="section-dot"></div>
+                        <span class="section-label">货量信息 (今日)</span>
                     </div>
-                </div>
+                    
+                    <div class="cargo-total">
+                        <div class="cargo-value">112,239.23<span class="cargo-unit">KG</span></div>
+                        <div class="cargo-label">总货量</div>
+                    </div>
 
-                <!-- 占比数据 - 可点击下钻 -->
-                <div class="data-grid-2">
-                    <div class="data-box" onclick="location.href='secondary-ratio-detail.html?type=send'">
-                        <div class="data-percentage">20.7%</div>
-                        <div class="data-desc">二级发件占比</div>
-                        <div class="clickable-hint">点击进入详情 ›</div>
-                        <div class="data-sub-grid">
-                            <div class="data-sub-item">
-                                <div class="data-sub-value">345.6</div>
-                                <div class="data-sub-label">环比：+12%</div>
+                    <!-- 货量趋势图表 -->
+                    <div class="chart-box">
+                        <div class="chart-container">
+                            <canvas id="cargoChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 占比数据 - 可点击下钻 -->
+                    <div class="data-grid-2">
+                        <div class="data-box" onclick="location.href='secondary-ratio-detail.html?type=send'">
+                            <div class="data-percentage">20.7%</div>
+                            <div class="data-desc">二级发件占比</div>
+                            <div class="clickable-hint">点击进入详情 ›</div>
+                            <div class="data-sub-grid">
+                                <div class="data-sub-item">
+                                    <div class="data-sub-value">345.6</div>
+                                    <div class="data-sub-label">环比：+12%</div>
+                                </div>
+                                <div class="data-sub-item">
+                                    <div class="data-sub-value">23,234.89</div>
+                                    <div class="data-sub-label">同比：+8%</div>
+                                </div>
                             </div>
-                            <div class="data-sub-item">
-                                <div class="data-sub-value">23,234.89</div>
-                                <div class="data-sub-label">同比：+8%</div>
+                        </div>
+                        <div class="data-box" onclick="location.href='secondary-ratio-detail.html?type=receive'">
+                            <div class="data-percentage">18.7%</div>
+                            <div class="data-desc">二级派件占比</div>
+                            <div class="clickable-hint">点击进入详情 ›</div>
+                            <div class="data-sub-grid">
+                                <div class="data-sub-item">
+                                    <div class="data-sub-value">312.4</div>
+                                    <div class="data-sub-label">环比：+5%</div>
+                                </div>
+                                <div class="data-sub-item">
+                                    <div class="data-sub-value">20,992.34</div>
+                                    <div class="data-sub-label">同比：+3%</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="data-box" onclick="location.href='secondary-ratio-detail.html?type=receive'">
-                        <div class="data-percentage">18.7%</div>
-                        <div class="data-desc">二级派件占比</div>
-                        <div class="clickable-hint">点击进入详情 ›</div>
-                        <div class="data-sub-grid">
-                            <div class="data-sub-item">
-                                <div class="data-sub-value">312.4</div>
-                                <div class="data-sub-label">环比：+5%</div>
+
+                    <!-- 发派件数据 - 可点击下钻 -->
+                    <div class="data-grid-2">
+                        <div class="data-box" onclick="location.href='send-receive-detail.html?type=send-weight'">
+                            <div class="data-sub-label">发件重量 (kg)</div>
+                            <div class="data-sub-value">70,180.68</div>
+                            <div class="trend-badge trend-up">↑ +13%</div>
+                        </div>
+                        <div class="data-box" onclick="location.href='send-receive-detail.html?type=send-count'">
+                            <div class="data-sub-label">发件票数</div>
+                            <div class="data-sub-value">1,410</div>
+                            <div class="trend-badge trend-up">↑ +15%</div>
+                        </div>
+                        <div class="data-box" onclick="location.href='send-receive-detail.html?type=receive-weight'">
+                            <div class="data-sub-label">派件重量 (kg)</div>
+                            <div class="data-sub-value">172,805.77</div>
+                            <div class="trend-badge trend-down">↓ -13%</div>
+                        </div>
+                        <div class="data-box" onclick="location.href='send-receive-detail.html?type=receive-count'">
+                            <div class="data-sub-label">派件票数</div>
+                            <div class="data-sub-value">3,445</div>
+                            <div class="trend-badge trend-down">↓ -2%</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 收支信息 -->
+                <section class="card">
+                    <div class="section-title">
+                        <div class="section-dot"></div>
+                        <span class="section-label">收支信息 (今日)</span>
+                    </div>
+
+                    <!-- 收支数据 - 可点击下钻 -->
+                    <div class="income-expense-grid">
+                        <div class="ie-item" onclick="location.href='income-expense-detail.html?type=income'">
+                            <div class="ie-label">本期收入 (元)</div>
+                            <div class="ie-value">10,315.32</div>
+                            <div class="ie-trend">
+                                <span class="trend-badge trend-up">↑ +15%</span>
                             </div>
-                            <div class="data-sub-item">
-                                <div class="data-sub-value">20,992.34</div>
-                                <div class="data-sub-label">同比：+3%</div>
+                            <div class="clickable-hint">点击进入详情 ›</div>
+                        </div>
+                        <div class="ie-item" onclick="location.href='income-expense-detail.html?type=expense'">
+                            <div class="ie-label">本期支出 (元)</div>
+                            <div class="ie-value">8,256.48</div>
+                            <div class="ie-trend">
+                                <span class="trend-badge trend-up">↑ +9%</span>
+                            </div>
+                            <div class="clickable-hint">点击进入详情 ›</div>
+                        </div>
+                    </div>
+
+                    <!-- 收支趋势图表 -->
+                    <div class="chart-box">
+                        <div class="trend-selector">
+                            <select class="trend-select">
+                                <option>近 7 日</option>
+                                <option>近 15 日</option>
+                                <option>近 30 日</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="incomeExpenseChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 明细表格 -->
+                <section class="card">
+                    <div class="section-title">
+                        <div class="section-dot"></div>
+                        <span class="section-label">明细数据 (今日)</span>
+                    </div>
+
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>运单号</th>
+                                    <th>重量 (KG)</th>
+                                    <th>类型</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>ZTO202501001</td>
+                                    <td>25.5</td>
+                                    <td>二级发件</td>
+                                    <td>已签收</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>ZTO202501002</td>
+                                    <td>18.2</td>
+                                    <td>二级派件</td>
+                                    <td>运输中</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>ZTO202501003</td>
+                                    <td>32.8</td>
+                                    <td>二级发件</td>
+                                    <td>已签收</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>ZTO202501004</td>
+                                    <td>15.6</td>
+                                    <td>二级派件</td>
+                                    <td>派送中</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 质量&时效 Tab -->
+            <div class="tab-content" id="tab-quality">
+                <!-- 服务质量 -->
+                <section class="card quality-section">
+                    <div class="quality-header">
+                        <div class="quality-dot"></div>
+                        <span class="quality-title">服务质量</span>
+                        <span class="quality-date">(今日)</span>
+                    </div>
+
+                    <div class="quality-grid">
+                        <div class="quality-card">
+                            <div class="quality-value">0</div>
+                            <div class="quality-label">客户投诉票数</div>
+                            <div class="quality-rate">客诉率：0.000‰</div>
+                        </div>
+                        <div class="quality-card">
+                            <div class="quality-value">0</div>
+                            <div class="quality-label">网点投诉次数</div>
+                            <div class="quality-rate">网投率：0.000‰</div>
+                        </div>
+                        <div class="quality-card">
+                            <div class="quality-value">0</div>
+                            <div class="quality-label">分拨投诉票数</div>
+                            <div class="quality-rate">分投率：0.000‰</div>
+                        </div>
+                        <div class="quality-card">
+                            <div class="quality-value">0</div>
+                            <div class="quality-label">破损件数</div>
+                        </div>
+                        <div class="quality-card">
+                            <div class="quality-value">0</div>
+                            <div class="quality-label">延误件数</div>
+                        </div>
+                        <div class="quality-card">
+                            <div class="quality-value">0</div>
+                            <div class="quality-label">遗失件数</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 订单时效 (接单/揽收) -->
+                <section class="progress-section">
+                    <div class="quality-header">
+                        <div class="quality-dot"></div>
+                        <span class="quality-title">订单时效</span>
+                        <span class="quality-date">(今日)</span>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">接单及时率</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 100%;">
+                                <span class="progress-bar-text">100.00%</span>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 发派件数据 - 可点击下钻 -->
-                <div class="data-grid-2">
-                    <div class="data-box" onclick="location.href='send-receive-detail.html?type=send-weight'">
-                        <div class="data-sub-label">发件重量 (kg)</div>
-                        <div class="data-sub-value">70,180.68</div>
-                        <div class="trend-badge trend-up">↑ +13%</div>
-                    </div>
-                    <div class="data-box" onclick="location.href='send-receive-detail.html?type=send-count'">
-                        <div class="data-sub-label">发件票数</div>
-                        <div class="data-sub-value">1,410</div>
-                        <div class="trend-badge trend-up">↑ +15%</div>
-                    </div>
-                    <div class="data-box" onclick="location.href='send-receive-detail.html?type=receive-weight'">
-                        <div class="data-sub-label">派件重量 (kg)</div>
-                        <div class="data-sub-value">172,805.77</div>
-                        <div class="trend-badge trend-down">↓ -13%</div>
-                    </div>
-                    <div class="data-box" onclick="location.href='send-receive-detail.html?type=receive-count'">
-                        <div class="data-sub-label">派件票数</div>
-                        <div class="data-sub-value">3,445</div>
-                        <div class="trend-badge trend-down">↓ -2%</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 收支信息 -->
-            <section class="card">
-                <div class="section-title">
-                    <div class="section-dot"></div>
-                    <span class="section-label">收支信息 (今日)</span>
-                </div>
-
-                <!-- 收支数据 - 可点击下钻 -->
-                <div class="income-expense-grid">
-                    <div class="ie-item" onclick="location.href='income-expense-detail.html?type=income'">
-                        <div class="ie-label">本期收入 (元)</div>
-                        <div class="ie-value">10,315.32</div>
-                        <div class="ie-trend">
-                            <span class="trend-badge trend-up">↑ +15%</span>
+                    <div class="progress-item">
+                        <div class="progress-label">揽收及时率</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 90%;">
+                                <span class="progress-bar-text">90.00%</span>
+                            </div>
                         </div>
-                        <div class="clickable-hint">点击进入详情 ›</div>
                     </div>
-                    <div class="ie-item" onclick="location.href='income-expense-detail.html?type=expense'">
-                        <div class="ie-label">本期支出 (元)</div>
-                        <div class="ie-value">8,256.48</div>
-                        <div class="ie-trend">
-                            <span class="trend-badge trend-up">↑ +9%</span>
+                </section>
+
+                <!-- 订单时效 (到件/妥投) -->
+                <section class="progress-section">
+                    <div class="quality-header">
+                        <div class="quality-dot"></div>
+                        <span class="quality-title">订单时效</span>
+                        <span class="quality-date">(今日)</span>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">到件及时率</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 100%;">
+                                <span class="progress-bar-text">100.00%</span>
+                            </div>
                         </div>
-                        <div class="clickable-hint">点击进入详情 ›</div>
                     </div>
-                </div>
 
-                <!-- 收支趋势图表 -->
-                <div class="chart-box">
-                    <div class="trend-selector">
-                        <select class="trend-select">
-                            <option>近 7 日</option>
-                            <option>近 15 日</option>
-                            <option>近 30 日</option>
-                        </select>
+                    <div class="progress-item">
+                        <div class="progress-label">妥投率</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 90%;">
+                                <span class="progress-bar-text">90.00%</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="chart-container">
-                        <canvas id="incomeExpenseChart"></canvas>
+                </section>
+            </div>
+
+            <!-- 发件/到件 Tab -->
+            <div class="tab-content" id="tab-send">
+                <section class="card">
+                    <div class="section-title">
+                        <div class="section-dot"></div>
+                        <span class="section-label">发件/到件数据</span>
                     </div>
-                </div>
-            </section>
+                    <p style="text-align: center; color: #999; padding: 40px 0;">内容开发中...</p>
+                </section>
+            </div>
 
-            <!-- 明细表格 -->
-            <section class="card">
-                <div class="section-title">
-                    <div class="section-dot"></div>
-                    <span class="section-label">明细数据 (今日)</span>
-                </div>
-
-                <div class="data-table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>序号</th>
-                                <th>运单号</th>
-                                <th>重量 (KG)</th>
-                                <th>类型</th>
-                                <th>状态</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>ZTO202501001</td>
-                                <td>25.5</td>
-                                <td>二级发件</td>
-                                <td>已签收</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>ZTO202501002</td>
-                                <td>18.2</td>
-                                <td>二级派件</td>
-                                <td>运输中</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>ZTO202501003</td>
-                                <td>32.8</td>
-                                <td>二级发件</td>
-                                <td>已签收</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>ZTO202501004</td>
-                                <td>15.6</td>
-                                <td>二级派件</td>
-                                <td>派送中</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+            <!-- 客户&风险 Tab -->
+            <div class="tab-content" id="tab-customer">
+                <section class="card">
+                    <div class="section-title">
+                        <div class="section-dot"></div>
+                        <span class="section-label">客户&风险数据</span>
+                    </div>
+                    <p style="text-align: center; color: #999; padding: 40px 0;">内容开发中...</p>
+                </section>
+            </div>
         </main>
 
         <!-- 底部导航栏 -->
@@ -617,7 +872,7 @@
                 <span>经营数据</span>
             </div>
             <div class="nav-item">
-                <div class="nav-icon">📤</div>
+                <div class="nav-icon">��</div>
                 <span>发件</span>
             </div>
             <div class="nav-item">
@@ -636,6 +891,32 @@
     </div>
 
     <script>
+        // Tab 切换功能
+        const tabItems = document.querySelectorAll('.tab-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 移除所有 tab 的 active 状态
+                tabItems.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // 添加当前 tab 的 active 状态
+                item.classList.add('active');
+                const tabId = item.getAttribute('data-tab');
+                document.getElementById('tab-' + tabId).classList.add('active');
+            });
+        });
+
+        // 底部导航切换
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
         // 货量趋势图表 - 柱状图
         const cargoCtx = document.getElementById('cargoChart').getContext('2d');
         const cargoChart = new Chart(cargoCtx, {
@@ -821,24 +1102,6 @@
                     mode: 'index'
                 }
             }
-        });
-
-        // 标签页切换
-        const tabItems = document.querySelectorAll('.tab-item');
-        tabItems.forEach(item => {
-            item.addEventListener('click', () => {
-                tabItems.forEach(t => t.classList.remove('active'));
-                item.classList.add('active');
-            });
-        });
-
-        // 底部导航切换
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                navItems.forEach(n => n.classList.remove('active'));
-                item.classList.add('active');
-            });
         });
     </script>
 </body>
