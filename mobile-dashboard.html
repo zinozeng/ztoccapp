@@ -369,39 +369,7 @@
             border-bottom: none;
         }
 
-        /* 底部导航 */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            padding-bottom: env(safe-area-inset-bottom);
-            border-top: 1px solid #f0f0f0;
-            z-index: 100;
-        }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            color: #999;
-            font-size: 10px;
-            cursor: pointer;
-            padding: 4px 8px;
-        }
-
-        .nav-item.active {
-            color: #0066cc;
-        }
-
-        .nav-icon {
-            font-size: 20px;
-        }
 
         /* 可点击提示 */
         .clickable-hint {
@@ -1348,7 +1316,206 @@
                     </section>
                 </div>
             </div>
-                        <span class="section-label">发件/到件数据</span>
+
+            <!-- 到件数据内容 -->
+            <div class="sub-tab-content" id="subtab-receive-data">
+                <!-- 到件概览 -->
+                <section class="info-card">
+                    <div class="info-header">
+                        <span class="info-title">到件概览（今日）</span>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-value">620</div>
+                            <div class="info-label">总票数</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value">24,520.68</div>
+                            <div class="info-label">总重量 (kg)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value">86.52</div>
+                            <div class="info-label">总体积 (m³)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 到件预报 -->
+                <section class="info-table-card">
+                    <div class="info-header">
+                        <span class="info-title">到件预报（已扫描）</span>
+                    </div>
+                    <table class="status-table">
+                        <thead>
+                            <tr>
+                                <th>状态</th>
+                                <th>票数</th>
+                                <th>件数</th>
+                                <th>重量 (kg)</th>
+                                <th>体积 (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>开单未发</td>
+                                <td class="clickable-value" onclick="location.href='receive-forecast-detail.html?type=normal'">34</td>
+                                <td>110</td>
+                                <td>1342.49</td>
+                                <td>3.68</td>
+                            </tr>
+                            <tr>
+                                <td>开单未发（待配载）</td>
+                                <td>340</td>
+                                <td>1100</td>
+                                <td>13424.9</td>
+                                <td>36.8</td>
+                            </tr>
+                            <tr>
+                                <td>已发中心未到（汽运）</td>
+                                <td class="clickable-value" onclick="location.href='receive-forecast-detail.html?type=transit'">48</td>
+                                <td>156</td>
+                                <td>1917.88</td>
+                                <td>7.5229</td>
+                            </tr>
+                            <tr>
+                                <td>省中心已到未发（汽运）</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>省中心已到未发（专线）</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>中心已卸未扫（待卸中）</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- 到件状态 -->
+                <section class="info-table-card">
+                    <div class="info-header">
+                        <span class="info-title">到件状态（已扫描）</span>
+                    </div>
+                    <table class="status-table">
+                        <thead>
+                            <tr>
+                                <th>状态</th>
+                                <th>票数</th>
+                                <th>件数</th>
+                                <th>重量 (kg)</th>
+                                <th>体积 (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>到件中</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>到件未</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>已扫描</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- 派件预报 -->
+                <section class="info-table-card">
+                    <div class="info-header">
+                        <span class="info-title">派件预报（已扫描）</span>
+                    </div>
+                    <table class="status-table">
+                        <thead>
+                            <tr>
+                                <th>业务员</th>
+                                <th>已派件数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>张三</td>
+                                <td>37</td>
+                            </tr>
+                            <tr>
+                                <td>李四</td>
+                                <td>35</td>
+                            </tr>
+                            <tr>
+                                <td>王五</td>
+                                <td>25</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- 派件状态 -->
+                <section class="info-table-card">
+                    <div class="info-header">
+                        <span class="info-title">派件状态（派件未）</span>
+                    </div>
+                    <table class="status-table">
+                        <thead>
+                            <tr>
+                                <th>状态</th>
+                                <th>票数</th>
+                                <th>件数</th>
+                                <th>已扫描</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>待派件</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>派送中</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>已签收</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <!-- 客户&风险 Tab -->
+            <div class="tab-content" id="tab-customer">
+                <section class="card">
+                    <div class="section-title">
+                        <div class="section-dot"></div>
+                        <span class="section-label">客户&风险数据</span>
                     </div>
                     <p style="text-align: center; color: #999; padding: 40px 0;">内容开发中...</p>
                 </section>
@@ -1366,29 +1533,6 @@
             </div>
         </main>
 
-        <!-- 底部导航栏 -->
-        <nav class="bottom-nav">
-            <div class="nav-item active">
-                <div class="nav-icon">📊</div>
-                <span>经营数据</span>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">��</div>
-                <span>发件</span>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">📥</div>
-                <span>到件</span>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">✅</div>
-                <span>质量</span>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">👤</div>
-                <span>我的</span>
-            </div>
-        </nav>
     </div>
 
     <script>
@@ -1433,14 +1577,7 @@
             });
         });
 
-        // 底部导航切换
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                navItems.forEach(n => n.classList.remove('active'));
-                item.classList.add('active');
-            });
-        });
+
 
         // 货量趋势图表 - 柱状图
         const cargoCtx = document.getElementById('cargoChart').getContext('2d');
