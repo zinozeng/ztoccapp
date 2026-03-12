@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>发件详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+        }
+
+        .back-btn:active {
+            opacity: 0.6;
+        }
+
+        .header-title {
+            color: #333;
+            font-size: 17px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .main-content {
+            padding: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .summary-item {
+            background: #f8f9ff;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        .summary-label {
+            font-size: 10px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .data-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .data-table th {
+            background: #f5f7fa;
+            padding: 10px 6px;
+            text-align: left;
+            color: #666;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 12px 6px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #999;
+        }
+
+        @media (max-width: 375px) {
+            .summary-value {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <header class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">‹</button>
+                <h1 class="header-title" id="pageTitle">开单未发详情</h1>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalTickets">34</div>
+                        <div class="summary-label">票数</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalWeight">1342.49</div>
+                        <div class="summary-label">重量 (kg)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalVolume">3.68</div>
+                        <div class="summary-label">体积 (m³)</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalCount">110</div>
+                        <div class="summary-label">件数</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">明细列表（共 <span id="listCount">34</span> 条）</div>
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>运单号</th>
+                                <th>票数</th>
+                                <th>重量 (kg)</th>
+                                <th>体积 (m³)</th>
+                                <th>产品名称</th>
+                                <th>备注</th>
+                                <th>操作时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td>ZTO202501232</td>
+                                <td>1</td>
+                                <td>35.5</td>
+                                <td>0.12</td>
+                                <td>零担</td>
+                                <td>-</td>
+                                <td>01-30 10:23</td>
+                            </tr>
+                            <tr>
+                                <td>ZTO202501233</td>
+                                <td>1</td>
+                                <td>42.8</td>
+                                <td>0.15</td>
+                                <td>冷链快递</td>
+                                <td>-</td>
+                                <td>01-30 10:45</td>
+                            </tr>
+                            <tr>
+                                <td>ZTO202501234</td>
+                                <td>1</td>
+                                <td>28.3</td>
+                                <td>0.09</td>
+                                <td>冷链小件</td>
+                                <td>-</td>
+                                <td>01-30 11:12</td>
+                            </tr>
+                            <tr>
+                                <td>ZTO202501235</td>
+                                <td>1</td>
+                                <td>55.2</td>
+                                <td>0.18</td>
+                                <td>零担</td>
+                                <td>-</td>
+                                <td>01-30 11:38</td>
+                            </tr>
+                            <tr>
+                                <td>ZTO202501236</td>
+                                <td>1</td>
+                                <td>31.6</td>
+                                <td>0.11</td>
+                                <td>鲸确达 - 零担</td>
+                                <td>-</td>
+                                <td>01-30 12:05</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+
+        const config = {
+            'normal': {
+                title: '开单未发详情',
+                tickets: '34',
+                weight: '1342.49',
+                volume: '3.68',
+                count: '110'
+            },
+            'month': {
+                title: '月结票数详情',
+                tickets: '48',
+                weight: '1917.88',
+                volume: '7.5229',
+                count: '156'
+            },
+            'present': {
+                title: '现结票数详情',
+                tickets: '0',
+                weight: '0',
+                volume: '0',
+                count: '0'
+            },
+            'collect': {
+                title: '到付票数详情',
+                tickets: '0',
+                weight: '0',
+                volume: '0',
+                count: '0'
+            }
+        };
+
+        const currentConfig = config[type] || config['normal'];
+
+        document.getElementById('pageTitle').textContent = currentConfig.title;
+        document.getElementById('totalTickets').textContent = currentConfig.tickets;
+        document.getElementById('totalWeight').textContent = currentConfig.weight;
+        document.getElementById('totalVolume').textContent = currentConfig.volume;
+        document.getElementById('totalCount').textContent = currentConfig.count;
+        document.getElementById('listCount').textContent = currentConfig.tickets;
+
+        // 如果数据为 0，显示空状态
+        if (currentConfig.tickets === '0') {
+            document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" class="empty-state">暂无数据</td></tr>';
+        }
+    </script>
+</body>
+</html>

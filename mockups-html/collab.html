@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>拦截件-协商派送</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero navy">
+        <div class="hero-top">
+          <div>
+            <h1>异常运单详情</h1>
+            <div class="crumb">运单管理 / 异常运单 / 协商派送处理</div>
+          </div>
+          <a class="btn" href="./index.html">返回总览</a>
+        </div>
+        <div class="hero-bottom">
+          <span class="pill danger">拦截件-协商派送</span>
+          <span class="meta">当前状态 <b>待派件网点审核</b></span>
+          <span class="meta">当前处理网点 <b>杭州派件网点</b></span>
+          <span class="meta">运单号 <b>ZT202603030001</b></span>
+        </div>
+      </section>
+
+      <section class="layout">
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">运单基础信息</h2>
+            <p class="section-subtitle">固定展示运单主数据和客户信息</p>
+            <div class="card-soft">
+              <div class="grid-3">
+                <div>
+                  <div class="field-label">寄件人</div>
+                  <div class="field-value">王先生 / 138xxxx0001</div>
+                </div>
+                <div>
+                  <div class="field-label">收件人</div>
+                  <div class="field-value">李先生 / 139xxxx0002</div>
+                </div>
+                <div>
+                  <div class="field-label">货品信息</div>
+                  <div class="field-value">冷链样品 / 2件 / 18KG</div>
+                </div>
+              </div>
+              <div class="grid-2" style="margin-top: 28px">
+                <div>
+                  <div class="field-label">寄件地址</div>
+                  <div class="field-body">上海市青浦区华新镇华志路 1688 号</div>
+                </div>
+                <div>
+                  <div class="field-label">收件地址</div>
+                  <div class="field-body">杭州市余杭区五常街道文一西路 999 号</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">异常信息</h2>
+            <p class="section-subtitle">寄件网点发起协商派送申请，派件网点在本页审核</p>
+            <div class="grid-2">
+              <div class="card-soft">
+                <div class="field-label">异常原因</div>
+                <div class="field-value">客户临时变更派送要求</div>
+              </div>
+              <div class="card-soft">
+                <div class="field-label">期望处理方式</div>
+                <div class="field-value">电话协商后再派送</div>
+              </div>
+            </div>
+            <div class="card-soft" style="margin-top: 20px">
+              <div class="field-label">协商派送说明</div>
+              <div class="field-body">
+                收件人要求晚间到货，请派件网点先电话确认签收时间，再决定是否安排当日派送。
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">审核处理区</h2>
+            <p class="section-subtitle">当前登录角色：派件网点，仅可审核，不可修改发起内容</p>
+            <div class="choice-row">
+              <div class="choice active warn">
+                <span class="radio"></span>
+                <span>审核通过</span>
+              </div>
+              <div class="choice">
+                <span class="radio"></span>
+                <span>审核驳回</span>
+              </div>
+            </div>
+            <div class="textarea" style="margin-top: 20px">
+              <div class="field-label">审核意见</div>
+              <div class="field-body">建议先联系客户确认签收时段。</div>
+            </div>
+          </section>
+        </div>
+
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">流程状态</h2>
+            <p class="section-subtitle">按角色动态切换节点与可执行动作</p>
+            <div class="steps progress-2 orange">
+              <div class="step active orange">
+                <div class="step-dot"></div>
+                <div class="step-label">寄件网点发起</div>
+              </div>
+              <div class="step active orange">
+                <div class="step-dot"></div>
+                <div class="step-label">派件网点审核</div>
+              </div>
+              <div class="step">
+                <div class="step-dot"></div>
+                <div class="step-label">寄件网点处理</div>
+              </div>
+            </div>
+            <div class="card-soft" style="margin-top: 24px; background: #fff7ed">
+              <div class="field-label">当前节点</div>
+              <div class="field-value" style="color: #9a3412">派件网点审核</div>
+              <div class="field-body" style="margin-top: 12px">
+                寄件网点和派件网点可见；派件网点审核通过或驳回后，流转至寄件网点处理结果。
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">权限说明</h2>
+            <div class="card-soft">
+              <div class="grid-2">
+                <div class="field-label">当前登录角色</div>
+                <div class="field-body">派件网点</div>
+                <div class="field-label">当前可见范围</div>
+                <div class="field-body">寄件网点、派件网点</div>
+                <div class="field-label">当前可执行动作</div>
+                <div class="field-body">审核通过 / 审核驳回</div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">处理记录</h2>
+            <div class="timeline">
+              <div class="timeline-item">2026-03-03 10:20 上海寄件网点 张三 发起协商派送</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="bottom-bar">
+        <div class="bottom-note">同一框架适配 4 类异常，右侧固定展示流程和权限，便于拆成复用组件。</div>
+        <div class="button-row">
+          <div class="btn">审核驳回</div>
+          <div class="btn primary orange">审核通过</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

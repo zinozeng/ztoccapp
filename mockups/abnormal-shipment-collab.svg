@@ -1,0 +1,128 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6F8FC"/>
+      <stop offset="1" stop-color="#EEF3F8"/>
+    </linearGradient>
+    <linearGradient id="hero" x1="80" y1="84" x2="1520" y2="200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16324F"/>
+      <stop offset="1" stop-color="#234F7D"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#A7B6C8" flood-opacity="0.25"/>
+    </filter>
+    <style>
+      .t{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif}
+      .h1{font-size:34px;font-weight:700;fill:#FFF}
+      .s1{font-size:15px;font-weight:500;fill:#C7D5E4}
+      .k{font-size:14px;font-weight:500;fill:#6B7A90}
+      .v{font-size:18px;font-weight:700;fill:#203044}
+      .title{font-size:22px;font-weight:700;fill:#203044}
+      .sub{font-size:15px;font-weight:500;fill:#7B8AA0}
+      .body{font-size:15px;font-weight:500;fill:#324255}
+      .small{font-size:13px;font-weight:500;fill:#8794A7}
+      .btn{font-size:18px;font-weight:700;fill:#FFF}
+      .chip{font-size:14px;font-weight:700;fill:#B42318}
+      .white{fill:#FFF}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bg)"/>
+
+  <rect x="80" y="84" width="1440" height="150" rx="28" fill="url(#hero)" filter="url(#shadow)"/>
+  <text x="124" y="138" class="t h1">异常运单详情</text>
+  <text x="124" y="173" class="t s1">运单管理 / 异常运单 / 协商派送处理</text>
+
+  <rect x="124" y="190" width="190" height="44" rx="22" fill="#FFF0"/>
+  <rect x="124" y="190" width="190" height="44" rx="22" fill="#FEE4E2"/>
+  <text x="154" y="218" class="t chip">拦截件-协商派送</text>
+
+  <text x="390" y="214" class="t s1">当前状态</text>
+  <text x="470" y="214" class="t" style="font-size:17px;font-weight:700;fill:#FFFFFF">待派件网点审核</text>
+  <text x="670" y="214" class="t s1">当前处理网点</text>
+  <text x="790" y="214" class="t" style="font-size:17px;font-weight:700;fill:#FFFFFF">杭州派件网点</text>
+  <text x="1050" y="214" class="t s1">运单号</text>
+  <text x="1110" y="214" class="t" style="font-size:17px;font-weight:700;fill:#FFFFFF">ZT202603030001</text>
+
+  <rect x="80" y="274" width="920" height="766" rx="28" fill="#FFF" filter="url(#shadow)"/>
+  <rect x="1032" y="274" width="488" height="766" rx="28" fill="#FFF" filter="url(#shadow)"/>
+
+  <text x="120" y="328" class="t title">运单基础信息</text>
+  <text x="120" y="356" class="t sub">固定展示运单主数据和客户信息</text>
+
+  <rect x="120" y="384" width="840" height="138" rx="20" fill="#F7F9FC"/>
+  <text x="148" y="425" class="t k">寄件人</text>
+  <text x="148" y="454" class="t v">王先生 / 138xxxx0001</text>
+  <text x="432" y="425" class="t k">收件人</text>
+  <text x="432" y="454" class="t v">李先生 / 139xxxx0002</text>
+  <text x="716" y="425" class="t k">货品信息</text>
+  <text x="716" y="454" class="t v">冷链样品 / 2件 / 18KG</text>
+  <text x="148" y="492" class="t k">寄件地址</text>
+  <text x="148" y="515" class="t body">上海市青浦区华新镇华志路 1688 号</text>
+  <text x="432" y="492" class="t k">收件地址</text>
+  <text x="432" y="515" class="t body">杭州市余杭区五常街道文一西路 999 号</text>
+
+  <text x="120" y="584" class="t title">异常信息</text>
+  <text x="120" y="612" class="t sub">寄件网点发起协商派送申请，派件网点在本页审核</text>
+
+  <rect x="120" y="640" width="400" height="76" rx="16" fill="#F7F9FC"/>
+  <text x="148" y="670" class="t k">异常原因</text>
+  <text x="148" y="697" class="t v">客户临时变更派送要求</text>
+
+  <rect x="560" y="640" width="400" height="76" rx="16" fill="#F7F9FC"/>
+  <text x="588" y="670" class="t k">期望处理方式</text>
+  <text x="588" y="697" class="t v">电话协商后再派送</text>
+
+  <rect x="120" y="736" width="840" height="110" rx="16" fill="#F7F9FC"/>
+  <text x="148" y="770" class="t k">协商派送说明</text>
+  <text x="148" y="804" class="t body">收件人要求晚间到货，请派件网点先电话确认签收时间，再决定是否安排当日派送。</text>
+
+  <text x="120" y="904" class="t title">审核处理区</text>
+  <text x="120" y="932" class="t sub">当前登录角色：派件网点，仅可审核，不可修改发起内容</text>
+
+  <rect x="120" y="960" width="260" height="56" rx="16" fill="#FFF7ED" stroke="#FDBA74"/>
+  <circle cx="154" cy="988" r="8" fill="#F97316"/>
+  <text x="176" y="994" class="t body">审核通过</text>
+  <rect x="400" y="960" width="260" height="56" rx="16" fill="#FFF" stroke="#D0D8E2"/>
+  <circle cx="434" cy="988" r="8" fill="#D0D8E2"/>
+  <text x="456" y="994" class="t body">审核驳回</text>
+  <rect x="680" y="948" width="280" height="82" rx="16" fill="#F7F9FC"/>
+  <text x="708" y="980" class="t k">审核意见</text>
+  <text x="708" y="1006" class="t body">建议先联系客户确认签收时段。</text>
+
+  <text x="1072" y="328" class="t title">流程状态</text>
+  <text x="1072" y="356" class="t sub">按角色动态切换节点与可执行动作</text>
+  <line x1="1108" y1="430" x2="1440" y2="430" stroke="#DCE4EE" stroke-width="6" stroke-linecap="round"/>
+  <line x1="1108" y1="430" x2="1276" y2="430" stroke="#F97316" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="1108" cy="430" r="22" fill="#F97316"/>
+  <circle cx="1276" cy="430" r="22" fill="#F97316"/>
+  <circle cx="1440" cy="430" r="22" fill="#E4EAF1"/>
+  <text x="1078" y="482" class="t body">寄件网点发起</text>
+  <text x="1240" y="482" class="t body">派件网点审核</text>
+  <text x="1404" y="482" class="t body">寄件网点处理</text>
+
+  <rect x="1072" y="540" width="408" height="144" rx="20" fill="#FFF7ED"/>
+  <text x="1100" y="580" class="t k">当前节点</text>
+  <text x="1100" y="614" class="t" style="font-size:24px;font-weight:700;fill:#9A3412">派件网点审核</text>
+  <text x="1100" y="650" class="t body">寄件网点和派件网点可见；派件网点审核通过或驳回后，流转至寄件网点处理结果。</text>
+
+  <text x="1072" y="742" class="t title">权限说明</text>
+  <rect x="1072" y="770" width="408" height="158" rx="20" fill="#F7F9FC"/>
+  <text x="1100" y="810" class="t k">当前登录角色</text>
+  <text x="1240" y="810" class="t body">派件网点</text>
+  <text x="1100" y="850" class="t k">当前可见范围</text>
+  <text x="1240" y="850" class="t body">寄件网点、派件网点</text>
+  <text x="1100" y="890" class="t k">当前可执行动作</text>
+  <text x="1240" y="890" class="t body">审核通过 / 审核驳回</text>
+
+  <text x="1072" y="976" class="t title">处理记录</text>
+  <rect x="1072" y="1004" width="408" height="36" rx="12" fill="#F7F9FC"/>
+  <text x="1094" y="1027" class="t small">2026-03-03 10:20 上海寄件网点 张三 发起协商派送</text>
+
+  <rect x="80" y="1074" width="1440" height="86" rx="28" fill="#FFFFFF" filter="url(#shadow)"/>
+  <rect x="1170" y="1091" width="150" height="52" rx="16" fill="#FFF" stroke="#D0D8E2"/>
+  <text x="1228" y="1123" class="t body">审核驳回</text>
+  <rect x="1340" y="1091" width="140" height="52" rx="16" fill="#EA580C"/>
+  <text x="1382" y="1123" class="t btn">审核通过</text>
+  <text x="124" y="1123" class="t body">页面说明：同一框架适配 4 类异常，右侧固定展示流程和权限。</text>
+</svg>

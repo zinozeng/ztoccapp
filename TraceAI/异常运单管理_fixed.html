@@ -1,0 +1,2280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异常运单管理 - 中通冷链</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            font-size: 12px;
+            background: #f5f7fa;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #003a5e 0%, #002a45 100%);
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            height: 60px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d9c0;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu {
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            padding: 14px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.7);
+            border-left: 3px solid transparent;
+            margin-bottom: 4px;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 217, 192, 0.1);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(0, 217, 192, 0.2) 0%, transparent 100%);
+            color: #00d9c0;
+            border-left-color: #00d9c0;
+        }
+
+        .menu-icon {
+            width: 16px;
+            text-align: center;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            margin-left: 200px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航栏 */
+        .topbar {
+            height: 60px;
+            background: linear-gradient(90deg, #008c8c 0%, #00a8a8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 140, 140, 0.15);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .breadcrumb-item {
+            cursor: pointer;
+        }
+
+        .breadcrumb-item:hover {
+            color: white;
+        }
+
+        .breadcrumb-separator {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 内容区域 */
+        .content {
+            padding: 16px;
+            flex: 1;
+        }
+
+        /* 统计卡片区域 */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stats-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .stats-card.total {
+            border-top: 3px solid #008c8c;
+        }
+
+        .stats-card.intercept-negotiate {
+            border-top: 3px solid #ff9c38;
+        }
+
+        .stats-card.intercept-return {
+            border-top: 3px solid #ff6b6b;
+        }
+
+        .stats-card.intercept-wait {
+            border-top: 3px solid #40a9ff;
+        }
+
+        .stats-card.address-warning {
+            border-top: 3px solid #ffc53d;
+        }
+
+        .stats-card.active {
+            box-shadow: 0 4px 12px rgba(0, 140, 140, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .stats-card.total.active {
+            border-top: 3px solid #008c8c;
+            background: linear-gradient(135deg, #e6f7f7 0%, white 100%);
+        }
+
+        .stats-card.intercept-negotiate.active {
+            background: linear-gradient(135deg, #fff7e6 0%, white 100%);
+        }
+
+        .stats-card.intercept-return.active {
+            background: linear-gradient(135deg, #fff1f0 0%, white 100%);
+        }
+
+        .stats-card.intercept-wait.active {
+            background: linear-gradient(135deg, #e6f7ff 0%, white 100%);
+        }
+
+        .stats-card.address-warning.active {
+            background: linear-gradient(135deg, #fffbe6 0%, white 100%);
+        }
+
+        .stats-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .stats-card-icon {
+            font-size: 20px;
+        }
+
+        .stats-card-title {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .stats-card-content {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .stats-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stats-card.intercept-negotiate .stats-number {
+            color: #ff9c38;
+        }
+
+        .stats-card.intercept-return .stats-number {
+            color: #ff6b6b;
+        }
+
+        .stats-card.intercept-wait .stats-number {
+            color: #40a9ff;
+        }
+
+        .stats-card.address-warning .stats-number {
+            color: #ffc53d;
+        }
+
+        .stats-card.total .stats-number {
+            color: #008c8c;
+        }
+
+        .stats-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* 筛选区域 */
+        .filter-section {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .filter-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            color: #666;
+            font-size: 12px;
+            min-width: 70px;
+        }
+
+        .filter-input {
+            padding: 6px 10px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 180px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #008c8c;
+        }
+
+        .filter-select {
+            padding: 6px 10px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            background: white;
+        }
+
+        .btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #008c8c 0%, #00a8a8 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #00a8a8 0%, #00b8b8 100%);
+        }
+
+        .btn-default {
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            color: #666;
+        }
+
+        .btn-default:hover {
+            border-color: #008c8c;
+            color: #008c8c;
+        }
+
+        /* 标签页 */
+        .tabs {
+            background: white;
+            padding: 0 20px;
+            border-bottom: 1px solid #e8e8e8;
+            margin-bottom: 12px;
+        }
+
+        .tab-list {
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #666;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .tab-item:hover {
+            color: #008c8c;
+        }
+
+        .tab-item.active {
+            color: #008c8c;
+            border-bottom-color: #008c8c;
+            font-weight: 500;
+        }
+
+        /* 二级标签页 */
+        .sub-tabs {
+            padding: 12px 0;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sub-tabs-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .sub-tab-item {
+            padding: 4px 12px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .sub-tab-item:hover {
+            background: #f5f5f5;
+        }
+
+        .sub-tab-item.active {
+            background: #e6f7f7;
+            color: #008c8c;
+            font-weight: 500;
+        }
+
+        .tab-count {
+            background: #e6f7f7;
+            color: #008c8c;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .tab-item.active .tab-count {
+            background: #008c8c;
+            color: white;
+        }
+
+        .tab-item:hover .tab-count {
+            background: #e6f7f7;
+            color: #008c8c;
+        }
+
+        /* 表格区域 */
+        .table-section {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #fafafa;
+        }
+
+        th {
+            padding: 12px 12px;
+            text-align: left;
+            font-weight: 500;
+            color: #333;
+            border-bottom: 1px solid #e8e8e8;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        tbody tr:hover {
+            background: #fafafa;
+        }
+
+        /* 状态标签 - 问题件、工单中心风格 */
+        .status-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+        }
+
+        /* 拦截件 - 协商派送 - 橙色 */
+        .status-intercept-negotiate {
+            background: #ff9c38;
+            color: white;
+        }
+
+        /* 拦截件 - 退货 - 红色 */
+        .status-intercept-return {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* 拦截件 - 等放货通知 - 蓝色 */
+        .status-intercept-wait {
+            background: #40a9ff;
+            color: white;
+        }
+
+        /* 地址预警 - 黄色 */
+        .status-address-warning {
+            background: #ffc53d;
+            color: white;
+        }
+
+        /* 处理状态 - 灰色 */
+        .status-processing {
+            background: #d9d9d9;
+            color: #666;
+        }
+
+        /* 处理状态 - 绿色 */
+        .status-completed {
+            background: #52c41a;
+            color: white;
+        }
+
+        /* 待审核状态 - 青色 */
+        .status-pending-audit {
+            background: #13c2c2;
+            color: white;
+        }
+
+        /* 操作链接 */
+        .action-link {
+            color: #008c8c;
+            cursor: pointer;
+            margin-right: 8px;
+            text-decoration: none;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        .action-link.disabled {
+            color: #d9d9d9;
+            cursor: not-allowed;
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 8px;
+        }
+
+        .pagination-info {
+            color: #999;
+            font-size: 12px;
+            margin-right: 16px;
+        }
+
+        .pagination-btn {
+            padding: 4px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .pagination-btn:hover {
+            border-color: #008c8c;
+            color: #008c8c;
+        }
+
+        .pagination-btn.active {
+            background: #008c8c;
+            color: white;
+            border-color: #008c8c;
+        }
+
+        .pagination-btn:disabled {
+            background: #f5f5f5;
+            color: #d9d9d9;
+            cursor: not-allowed;
+        }
+
+        /* 弹窗 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 4px;
+            width: 520px;
+            max-width: 90%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .form-row {
+            display: flex;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-right: 16px;
+        }
+
+        .form-group:last-child {
+            margin-right: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: #ff4d4f;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #008c8c;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 12px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #008c8c;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+                /* 详情弹窗 - 严格按截图设计 */
+        .detail-modal-overlay {
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .detail-modal-overlay.active {
+            display: flex;
+        }
+        
+        .detail-modal {
+            background: #f5f7fa;
+            border-radius: 12px;
+            width: 1200px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        .detail-header {
+            background: linear-gradient(135deg, #00606b 0%, #008c8c 100%);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .detail-header-left {
+            flex: 1;
+        }
+        
+        .detail-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+        }
+        
+        .detail-tags-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .detail-tag {
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+        
+        .detail-info-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            opacity: 0.95;
+            flex-wrap: wrap;
+        }
+        
+        .detail-info-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .detail-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .detail-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .detail-body {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 16px;
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 550px;
+        }
+        
+        .detail-main {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .detail-side {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .detail-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+        
+        .panel-header {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e8f0f0;
+        }
+        
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #00606b;
+            margin: 0 0 4px 0;
+        }
+        
+        .panel-subtitle {
+            font-size: 12px;
+            color: #8b9bb4;
+            margin: 0;
+        }
+        
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px 20px;
+        }
+        
+        .info-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .info-field-full {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .field-label {
+            font-size: 13px;
+            color: #8b9bb4;
+            font-weight: 500;
+        }
+        
+        .field-value {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .address-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 8px;
+        }
+        
+        .address-block {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .notice-box {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 4px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .notice-dot {
+            color: #fa8c16;
+            font-size: 16px;
+            line-height: 1;
+            font-weight: bold;
+        }
+        
+        .notice-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .audit-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .audit-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #f5f7fa;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .audit-option:hover {
+            background: #e8f0f0;
+        }
+        
+        .audit-option input[type="radio"] {
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .audit-option label {
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .audit-comment {
+            background: #f5f7fa;
+            border-radius: 4px;
+            padding: 12px 16px;
+        }
+        
+        .comment-title {
+            font-size: 13px;
+            color: #8b9bb4;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        
+        .comment-content {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        /* 流程时间轴 - 严格按截图 */
+        .process-block {
+            padding: 8px 0;
+        }
+        
+        .process-desc {
+            font-size: 13px;
+            color: #8b9bb4;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .process-steps {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 70px;
+        }
+        
+        .step-circle {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #d9d9d9;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #d9d9d9;
+            transition: all 0.3s;
+        }
+        
+        .process-step.completed .step-circle {
+            background: #ff9c38;
+            box-shadow: 0 0 0 2px #ff9c38;
+        }
+        
+        .process-step.current .step-circle {
+            background: #ff9c38;
+            box-shadow: 0 0 0 2px #ff9c38;
+            animation: stepPulse 2s infinite;
+        }
+        
+        @keyframes stepPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255, 156, 56, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(255, 156, 56, 0);
+            }
+        }
+        
+        .step-text {
+            font-size: 13px;
+            color: #333;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .process-step.completed .step-text {
+            color: #ff9c38;
+            font-weight: 500;
+        }
+        
+        .process-step.current .step-text {
+            color: #ff9c38;
+            font-weight: 600;
+        }
+        
+        .step-line {
+            width: 50px;
+            height: 2px;
+            background: #d9d9d9;
+            margin-top: -18px;
+        }
+        
+        .step-line.active {
+            background: #ff9c38;
+        }
+        
+        .current-step-box {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 6px;
+            padding: 16px;
+        }
+        
+        .current-step-label {
+            font-size: 13px;
+            color: #8b9bb4;
+            margin-bottom: 8px;
+        }
+        
+        .current-step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ff9c38;
+            margin-bottom: 8px;
+        }
+        
+        .current-step-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        /* 权限说明 */
+        .permission-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        
+        .permission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .permission-item:last-child {
+            border-bottom: none;
+        }
+        
+        .perm-title {
+            font-size: 13px;
+            color: #8b9bb4;
+        }
+        
+        .perm-content {
+            font-size: 14px;
+            color: #333;
+            text-align: right;
+        }
+        
+        /* 处理记录 */
+        .record-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .record-entry {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        
+        .record-time {
+            font-size: 13px;
+            color: #8b9bb4;
+            min-width: 140px;
+            line-height: 1.5;
+        }
+        
+        .record-detail {
+            flex: 1;
+        }
+        
+        .record-person {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .record-action {
+            font-size: 14px;
+            color: #008c8c;
+        }
+        
+        /* 详情页底部 */
+        .detail-footer-bar {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e8f0f0;
+        }
+        
+        .footer-tip {
+            font-size: 13px;
+            color: #8b9bb4;
+            line-height: 1.5;
+        }
+        
+        .footer-action-btns {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .detail-action-btn {
+            padding: 10px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #d9d9d9;
+        }
+        
+        .detail-btn-cancel {
+            background: white;
+            color: #666;
+        }
+        
+        .detail-btn-cancel:hover {
+            border-color: #008c8c;
+            color: #008c8c;
+        }
+        
+        .detail-btn-confirm {
+            background: linear-gradient(135deg, #ff9c38 0%, #ff6b36 100%);
+            color: white;
+            border: none;
+        }
+        
+        .detail-btn-confirm:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 156, 56, 0.35);
+        }
+        
+        .modal-footer {
+            padding: 12px 24px;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* 通知 */
+        .notification {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            border-left: 4px solid #52c41a;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ff4d4f;
+        }
+
+        .notification.info {
+            border-left: 4px solid #1890ff;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 信息展示 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            display: flex;
+        }
+
+        .info-label {
+            width: 90px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #333;
+            font-size: 12px;
+        }
+
+        .history-section {
+            margin-top: 16px;
+            padding: 12px;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+
+        .history-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .history-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-time {
+            color: #999;
+            flex-shrink: 0;
+            width: 140px;
+        }
+
+        .history-content {
+            flex: 1;
+            color: #333;
+        }
+
+        .history-operator {
+            color: #008c8c;
+        }
+    
+        /* 剩余时间样式 */
+        .time-left {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .time-left.urgent {
+            color: #ff9c38;
+            font-weight: 600;
+        }
+
+        .time-left.warning {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .time-left.danger {
+            color: #d93025;
+            font-weight: 600;
+        }
+</style>
+</head>
+<body>
+    <!-- 左侧导航栏 -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">ZTO 中通冷链</div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="menu-item">
+                <span class="menu-icon">📊</span>
+                <span>首页</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-icon">📦</span>
+                <span>运单管理</span>
+            </div>
+            <div class="menu-item active">
+                <span class="menu-icon">⚠️</span>
+                <span>拦截件</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-icon">📍</span>
+                <span>网点管理</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-icon">📈</span>
+                <span>数据统计</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-icon">⚙️</span>
+                <span>系统设置</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 顶部导航栏 -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <div class="breadcrumb">
+                    <span class="breadcrumb-item">首页</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-item">运单管理</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-item">拦截件</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <span>🔔</span>
+                <span>⚙️</span>
+                <div class="user-info">
+                    <div class="user-avatar">👤</div>
+                    <span>寄件网点 A</span>
+                    <span>▼</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 统计卡片区域 -->
+            <div class="stats-cards">
+                <div class="stats-card total active" data-tab="all">
+                    <div class="stats-card-header">
+                        <div class="stats-card-icon">�</div>
+                        <div class="stats-card-title">总数</div>
+                    </div>
+                    <div class="stats-card-content">
+                        <div class="stats-number">12</div>
+                        <div class="stats-label">总计</div>
+                    </div>
+                </div>
+                <div class="stats-card intercept-negotiate" data-tab="intercept-negotiate">
+                    <div class="stats-card-header">
+                        <div class="stats-card-icon">�</div>
+                        <div class="stats-card-title">协商派送</div>
+                    </div>
+                    <div class="stats-card-content">
+                        <div class="stats-number">3</div>
+                        <div class="stats-label">待处理</div>
+                    </div>
+                </div>
+                <div class="stats-card intercept-return" data-tab="intercept-return">
+                    <div class="stats-card-header">
+                        <div class="stats-card-icon">🔄</div>
+                        <div class="stats-card-title">退货</div>
+                    </div>
+                    <div class="stats-card-content">
+                        <div class="stats-number">2</div>
+                        <div class="stats-label">处理中</div>
+                    </div>
+                </div>
+                <div class="stats-card intercept-wait" data-tab="intercept-wait">
+                    <div class="stats-card-header">
+                        <div class="stats-card-icon">⏳</div>
+                        <div class="stats-card-title">等放货通知</div>
+                    </div>
+                    <div class="stats-card-content">
+                        <div class="stats-number">2</div>
+                        <div class="stats-label">等待通知</div>
+                    </div>
+                </div>
+                <div class="stats-card address-warning" data-tab="address-warning">
+                    <div class="stats-card-header">
+                        <div class="stats-card-icon">⚠️</div>
+                        <div class="stats-card-title">地址预警</div>
+                    </div>
+                    <div class="stats-card-content">
+                        <div class="stats-number">2</div>
+                        <div class="stats-label">待确认</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-header">
+                <h1 class="page-title">拦截件</h1>
+                <div class="page-actions">
+                    <button class="btn btn-primary" onclick="openReportModal()">上报拦截件</button>
+                </div>
+            </div>
+
+            <!-- 筛选区域 -->
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <span class="filter-label">运单号:</span>
+                        <input type="text" class="filter-input" placeholder="请输入运单号">
+                    </div>
+                    <div class="filter-item">
+                        <span class="filter-label">处理网点:</span>
+                        <input type="text" class="filter-input" placeholder="请输入处理网点">
+                    </div>
+                    <div class="filter-item">
+                        <span class="filter-label">发布网点:</span>
+                        <input type="text" class="filter-input" placeholder="请输入发布网点">
+                    </div>
+                </div>
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <span class="filter-label">异常类型:</span>
+                        <select class="filter-select">
+                            <option value="">全部</option>
+                            <option value="intercept-negotiate">协商派送</option>
+                            <option value="intercept-return">退货</option>
+                            <option value="intercept-wait">等放货通知</option>
+                            <option value="address-warning">地址预警</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <span class="filter-label">处理状态:</span>
+                        <select class="filter-select">
+                            <option value="">全部</option>
+                            <option value="待处理">待处理</option>
+                            <option value="已处理">已处理</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <span class="filter-label">上报时间:</span>
+                        <input type="date" class="filter-input">
+                        <span style="color: #999;">至</span>
+                        <input type="date" class="filter-input">
+                    </div>
+                    <div class="filter-item" style="margin-left: auto;">
+                        <button class="btn btn-primary">查询</button>
+                        <button class="btn btn-default" style="margin-left: 8px;">重置</button>
+                        <button class="btn btn-default" style="margin-left: 8px;">导出</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 标签页 -->
+            <div class="tabs">
+                <div class="tab-list">
+                    <div class="tab-item active" data-status="all">
+                        全部异常运单 <span class="tab-count">17</span>
+                    </div>
+                    <div class="tab-item" data-status="intercept-negotiate">
+                        协商派送 <span class="tab-count">6</span>
+                    </div>
+                    <div class="tab-item" data-status="intercept-return">
+                        退货 <span class="tab-count">4</span>
+                    </div>
+                    <div class="tab-item" data-status="intercept-wait">
+                        等放货通知 <span class="tab-count">4</span>
+                    </div>
+                    <div class="tab-item" data-status="address-warning">
+                        地址预警 <span class="tab-count">4</span>
+                    </div>
+                </div>
+                <!-- 二级筛选 -->
+                <div class="sub-tabs">
+                    <span class="sub-tabs-label">拦截状态:</span>
+                    <span class="sub-tab-item active" data-intercept-status="全部">全部</span>
+                    <span class="sub-tab-item" data-intercept-status="拦截中">拦截中</span>
+                    <span class="sub-tab-item" data-intercept-status="已拦截">已拦截</span>
+                </div>
+            </div>
+
+            <!-- 表格区域 -->
+            <div class="table-section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>运单号</th>
+                                <th>类型</th>
+                                <th>处理网点</th>
+                                <th>发布网点</th>
+                                <th>上报人</th>
+                                <th>上报时间</th>
+                                <th>拦截状态</th>
+                                <th>处理状态</th>
+                                <th>操作人</th>
+                                <th>操作时间</th>
+                                <th>剩余时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 拦截件 - 协商派送 -->
+                            <tr data-status="intercept-negotiate" data-process-status="待处理" data-intercept-status="已拦截" data-current-org="处理网点">
+                                <td>ZT20240301001</td>
+                                <td><span class="status-tag status-intercept-negotiate">协商派送</span></td>
+                                <td>派件网点 B</td>
+                                <td>寄件网点 A</td>
+                                <td>张三</td>
+                                <td>2024-03-01 14:30</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-pending-audit">待处理</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-negotiate" data-process-status="已处理" data-intercept-status="已拦截" data-current-org="发布网点">
+                                <td>ZT20240301002</td>
+                                <td><span class="status-tag status-intercept-negotiate">协商派送</span></td>
+                                <td>寄件网点 A</td>
+                                <td>寄件网点 A</td>
+                                <td>李四</td>
+                                <td>2024-03-01 15:15</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-processing">处理中</span></td>
+                                <td>王五</td>
+                                <td>2024-03-01 15:45</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-negotiate" data-process-status="已处理" data-intercept-status="已拦截" data-current-org="处理网点">
+                                <td>ZT20240301002</td>
+                                <td><span class="status-tag status-intercept-negotiate">协商派送</span></td>
+                                <td>寄件网点 A</td>
+                                <td>寄件网点 A</td>
+                                <td>李四</td>
+                                <td>2024-03-01 15:15</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-processing">处理中</span></td>
+                                <td>王五</td>
+                                <td>2024-03-01 15:45</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-negotiate" data-process-status="已处理" data-intercept-status="已拦截" data-current-org="处理网点">
+                                <td>ZT20240301002</td>
+                                <td><span class="status-tag status-intercept-negotiate">协商派送</span></td>
+                                <td>寄件网点 A</td>
+                                <td>寄件网点 A</td>
+                                <td>李四</td>
+                                <td>2024-03-01 15:15</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-processing">处理中</span></td>
+                                <td>王五</td>
+                                <td>2024-03-01 15:45</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-negotiate" data-process-status="已处理" data-intercept-status="已拦截" data-current-org="发布网点">
+                                <td>ZT20240301003</td>
+                                <td><span class="status-tag status-intercept-negotiate">协商派送</span></td>
+                                <td>寄件网点 B</td>
+                                <td>寄件网点 B</td>
+                                <td>赵六</td>
+                                <td>2024-03-01 10:20</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-completed">已处理</span></td>
+                                <td>钱七</td>
+                                <td>2024-03-01 10:45</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+
+                            <!-- 拦截件 - 退货 -->
+                            <tr data-status="intercept-return" data-process-status="待处理" data-intercept-status="拦截中" data-current-org="发布网点">
+                                <td>ZT20240301004</td>
+                                <td><span class="status-tag status-intercept-return">退货</span></td>
+                                <td>派件网点 C</td>
+                                <td>派件网点 C</td>
+                                <td>孙八</td>
+                                <td>2024-03-01 09:15</td>
+                                <td><span class="status-tag status-intercepting">拦截中</span></td>
+                                <td><span class="status-tag status-processing">退货中</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-return" data-process-status="待处理" data-intercept-status="拦截中" data-current-org="处理网点">
+                                <td>ZT20240301004</td>
+                                <td><span class="status-tag status-intercept-return">退货</span></td>
+                                <td>派件网点 C</td>
+                                <td>派件网点 C</td>
+                                <td>孙八</td>
+                                <td>2024-03-01 09:15</td>
+                                <td><span class="status-tag status-intercepting">拦截中</span></td>
+                                <td><span class="status-tag status-processing">退货中</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-return" data-process-status="待处理" data-intercept-status="拦截中" data-current-org="处理网点">
+                                <td>ZT20240301004</td>
+                                <td><span class="status-tag status-intercept-return">退货</span></td>
+                                <td>派件网点 C</td>
+                                <td>派件网点 C</td>
+                                <td>孙八</td>
+                                <td>2024-03-01 09:15</td>
+                                <td><span class="status-tag status-intercepting">拦截中</span></td>
+                                <td><span class="status-tag status-processing">退货中</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-return" data-process-status="待处理" data-intercept-status="已拦截" data-current-org="发布网点">
+                                <td>ZT20240301005</td>
+                                <td><span class="status-tag status-intercept-return">退货</span></td>
+                                <td>寄件网点 A</td>
+                                <td>寄件网点 A</td>
+                                <td>周九</td>
+                                <td>2024-02-28 16:45</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-completed">已处理</span></td>
+                                <td>吴十</td>
+                                <td>2024-02-28 17:00</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            
+                            <!-- 拦截件 - 等放货通知 -->
+                            <tr data-status="intercept-wait" data-process-status="待处理" data-intercept-status="拦截中" data-current-org="发布网点">
+                                <td>ZT20240301006</td>
+                                <td><span class="status-tag status-intercept-wait">等放货通知</span></td>
+                                <td>中转仓 A</td>
+                                <td>中转仓 A</td>
+                                <td>郑十一</td>
+                                <td>2024-03-01 11:00</td>
+                                <td><span class="status-tag status-intercepting">拦截中</span></td>
+                                <td><span class="status-tag status-processing">等待通知</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-wait" data-process-status="待处理" data-intercept-status="拦截中" data-current-org="处理网点">
+                                <td>ZT20240301006</td>
+                                <td><span class="status-tag status-intercept-wait">等放货通知</span></td>
+                                <td>中转仓 A</td>
+                                <td>中转仓 A</td>
+                                <td>郑十一</td>
+                                <td>2024-03-01 11:00</td>
+                                <td><span class="status-tag status-intercepting">拦截中</span></td>
+                                <td><span class="status-tag status-processing">等待通知</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-wait" data-process-status="待处理" data-intercept-status="拦截中" data-current-org="处理网点">
+                                <td>ZT20240301006</td>
+                                <td><span class="status-tag status-intercept-wait">等放货通知</span></td>
+                                <td>中转仓 A</td>
+                                <td>中转仓 A</td>
+                                <td>郑十一</td>
+                                <td>2024-03-01 11:00</td>
+                                <td><span class="status-tag status-intercepting">拦截中</span></td>
+                                <td><span class="status-tag status-processing">等待通知</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="intercept-wait" data-process-status="待处理" data-intercept-status="已拦截" data-current-org="发布网点">
+                                <td>ZT20240301007</td>
+                                <td><span class="status-tag status-intercept-wait">等放货通知</span></td>
+                                <td>派件网点 B</td>
+                                <td>派件网点 B</td>
+                                <td>冯十二</td>
+                                <td>2024-02-28 14:30</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-completed">已处理</span></td>
+                                <td>陈十三</td>
+                                <td>2024-02-28 15:00</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            
+                            <!-- 地址预警 -->
+                            <tr data-status="address-warning" data-process-status="待处理" data-intercept-status="已拦截" data-current-org="发布网点">
+                                <td>ZT20240301008</td>
+                                <td><span class="status-tag status-address-warning">地址预警</span></td>
+                                <td>寄件网点 A</td>
+                                <td>系统自动</td>
+                                <td>系统</td>
+                                <td>2024-03-01 16:20</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-processing">待处理</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="address-warning" data-process-status="待处理" data-intercept-status="已拦截" data-current-org="处理网点">
+                                <td>ZT20240301008</td>
+                                <td><span class="status-tag status-address-warning">地址预警</span></td>
+                                <td>寄件网点 A</td>
+                                <td>系统自动</td>
+                                <td>系统</td>
+                                <td>2024-03-01 16:20</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-processing">待处理</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="address-warning" data-process-status="待处理" data-intercept-status="已拦截" data-current-org="处理网点">
+                                <td>ZT20240301008</td>
+                                <td><span class="status-tag status-address-warning">地址预警</span></td>
+                                <td>寄件网点 A</td>
+                                <td>系统自动</td>
+                                <td>系统</td>
+                                <td>2024-03-01 16:20</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-processing">待处理</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                            <tr data-status="address-warning" data-process-status="已处理" data-intercept-status="已拦截" data-current-org="发布网点">
+                                <td>ZT20240301009</td>
+                                <td><span class="status-tag status-address-warning">地址预警</span></td>
+                                <td>寄件网点 A</td>
+                                <td>系统自动</td>
+                                <td>系统</td>
+                                <td>2024-02-28 10:15</td>
+                                <td><span class="status-tag status-intercepted">已拦截</span></td>
+                                <td><span class="status-tag status-completed">已处理</span></td>
+                                <td>卫十四</td>
+                                <td>2024-02-28 10:30</td>
+                                <td class="action-buttons"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 分页 -->
+                <div class="pagination">
+                    <span class="pagination-info">共 17 条</span>
+                    <button class="pagination-btn" disabled>&lt;</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 异常运单详情弹窗 -->
+    <div class="detail-modal-overlay" id="detailModal">
+        <div class="detail-modal">
+            <!-- 头部 -->
+            <div class="detail-header">
+                <div class="detail-header-left">
+                    <h2 class="detail-title">异常运单详情</h2>
+                    <div class="detail-tags-row">
+                        <span class="detail-tag">试单管理</span>
+                        <span class="detail-tag">异常运单</span>
+                        <span class="detail-tag">协商派送</span>
+                    </div>
+                    <div class="detail-info-row">
+                        <span class="detail-info-item">运单编号：ZT20240301001</span>
+                        <span class="detail-info-item">异常类型：协商派送</span>
+                        <span class="detail-info-item">当前状态：已拦截</span>
+                    </div>
+                </div>
+                <button class="detail-close-btn" onclick="closeDetailModal()">&times;</button>
+            </div>
+            
+            <!-- 主体内容 -->
+            <div class="detail-body">
+                <!-- 左侧主内容区 -->
+                <div class="detail-main">
+                    <!-- 运单基础信息 -->
+                    <div class="detail-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">运单基础信息</h3>
+                            <p class="panel-subtitle">展示寄件及收件信息和货物信息</p>
+                        </div>
+                        <div class="info-section">
+                            <div class="info-field">
+                                <span class="field-label">寄件人</span>
+                                <span class="field-value">王先生 / 138xxxx0001</span>
+                            </div>
+                            <div class="info-field">
+                                <span class="field-label">收件人</span>
+                                <span class="field-value">李先生 / 139xxxx0002</span>
+                            </div>
+                            <div class="info-field">
+                                <span class="field-label">货物信息</span>
+                                <span class="field-value">冷链样品 / 2 件 / 10KG</span>
+                            </div>
+                            <div class="info-field-full">
+                                <span class="field-label">寄件地址</span>
+                                <span class="field-value">上海市浦东新区锦绣东路 1088 号</span>
+                            </div>
+                            <div class="info-field-full">
+                                <span class="field-label">收件地址</span>
+                                <span class="field-value">杭州市余杭区五常街道文一西路 969 号</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 异常信息 -->
+                    <div class="detail-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">异常信息</h3>
+                            <p class="panel-subtitle">寄件网点发起协商申请，派件网点查看并审核</p>
+                        </div>
+                        <div class="info-section">
+                            <div class="info-field">
+                                <span class="field-label">异常原因</span>
+                                <span class="field-value">客户临时变更派送要求</span>
+                            </div>
+                            <div class="info-field">
+                                <span class="field-label">期望处理方式</span>
+                                <span class="field-value">电话协商后再派送</span>
+                            </div>
+                            <div class="info-field-full">
+                                <span class="field-label">异常情况说明</span>
+                                <span class="field-value">收件人要求更改派送时间，需派件网点先电话确认具体时间，再次投递前需安排当日送达。</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 审核处理区 -->
+                    <div class="detail-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">审核处理区</h3>
+                        </div>
+                        <div class="notice-box">
+                            <span class="notice-dot">●</span>
+                            <span class="notice-text">当前您是角色：派件网点，仅可审核，不可修改发起内容</span>
+                        </div>
+                        <div class="audit-options">
+                            <div class="audit-option">
+                                <input type="radio" name="audit" id="audit-pass" checked>
+                                <label for="audit-pass">审核通过</label>
+                            </div>
+                            <div class="audit-option">
+                                <input type="radio" name="audit" id="audit-reject">
+                                <label for="audit-reject">审核驳回</label>
+                            </div>
+                        </div>
+                        <div class="audit-comment">
+                            <div class="comment-title">审核意见：</div>
+                            <div class="comment-content">建议先联系客户确认签收时间。</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧边栏 -->
+                <div class="detail-side">
+                    <!-- 流程状态 -->
+                    <div class="detail-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">流程状态</h3>
+                        </div>
+                        <div class="process-block">
+                            <p class="process-desc">异常运单处理节点与当前执行动作</p>
+                            <div class="process-steps">
+                                <div class="process-step completed">
+                                    <div class="step-circle"></div>
+                                    <span class="step-text">寄件网点发起</span>
+                                </div>
+                                <div class="step-line active"></div>
+                                <div class="process-step current">
+                                    <div class="step-circle"></div>
+                                    <span class="step-text">派件网点审核</span>
+                                </div>
+                                <div class="step-line"></div>
+                                <div class="process-step">
+                                    <div class="step-circle"></div>
+                                    <span class="step-text">寄件网点处理</span>
+                                </div>
+                            </div>
+                            <div class="current-step-box">
+                                <div class="current-step-label">当前节点</div>
+                                <div class="current-step-title">派件网点审核</div>
+                                <p class="current-step-desc">寄件网点发起协商网点可发起：改件网点审核通过或驳回后，流转至寄件网点处理结果。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 权限说明 -->
+                    <div class="detail-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">权限说明</h3>
+                        </div>
+                        <div class="permission-list">
+                            <div class="permission-item">
+                                <span class="perm-title">当前登录角色</span>
+                                <span class="perm-content">派件网点</span>
+                            </div>
+                            <div class="permission-item">
+                                <span class="perm-title">当前可发起</span>
+                                <span class="perm-content">寄件网点、派件网点</span>
+                            </div>
+                            <div class="permission-item">
+                                <span class="perm-title">当前可执行动作</span>
+                                <span class="perm-content">审核通过 / 审核驳回</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 处理记录 -->
+                    <div class="detail-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">处理记录</h3>
+                        </div>
+                        <div class="record-timeline">
+                            <div class="record-entry">
+                                <span class="record-time">2024-03-01 14:30</span>
+                                <div class="record-detail">
+                                    <div class="record-person">寄件网点 张三</div>
+                                    <div class="record-action">发起协商派送</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部操作栏 -->
+            <div class="detail-footer-bar">
+                <div class="footer-tip">
+                    统一规范说明：● 表示必，红色框定展示范围和权限，便于快速查看邮件。
+                </div>
+                <div class="footer-action-btns">
+                    <button class="detail-action-btn detail-btn-cancel" onclick="closeDetailModal()">审核驳回</button>
+                    <button class="detail-action-btn detail-btn-confirm" onclick="closeDetailModal()">审核通过</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 上报拦截件弹窗 -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal" style="width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">上报拦截件</h3>
+                <button class="modal-close" onclick="closeModal('reportModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">运单号 <span style="color: #ff4d4f;">*</span></label>
+                    <input type="text" class="form-input" placeholder="请输入运单号" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">拦截类型 <span style="color: #ff4d4f;">*</span></label>
+                    <select class="form-select" required>
+                        <option value="">请选择拦截类型</option>
+                        <option value="intercept-negotiate">协商派送</option>
+                        <option value="intercept-return">退货</option>
+                        <option value="intercept-wait">等放货通知</option>
+                        <option value="address-warning">地址预警</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">处理网点</label>
+                    <input type="text" class="form-input" placeholder="请输入处理网点">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">发布网点</label>
+                    <input type="text" class="form-input" placeholder="请输入发布网点">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">异常描述 <span style="color: #ff4d4f;">*</span></label>
+                    <textarea class="form-textarea" placeholder="请详细描述异常情况" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">联系方式</label>
+                    <input type="text" class="form-input" placeholder="请输入联系人及电话">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" onclick="closeModal('reportModal')">取消</button>
+                <button class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 生成操作按钮
+        function generateActionButtons(row) {
+            const currentOrg = row.dataset.currentOrg;
+            const status = row.dataset.status;
+            const interceptStatus = row.dataset.interceptStatus;
+            const processStatus = row.dataset.processStatus;
+            
+            const actionCell = row.querySelector('.action-buttons');
+            if (!actionCell) return;
+            
+            let buttons = [];
+            const orderNo = row.cells[0].textContent;
+            
+            if (status === 'intercept-negotiate') {
+                if (currentOrg === '发布网点') {
+                    if (processStatus === '待处理') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">处理</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">撤销</span>`);
+                    } else {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">改单</span>`);
+                    }
+                } else {
+                    if (processStatus === '待处理') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">处理</span>`);
+                    } else {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                    }
+                }
+            } else if (status === 'intercept-return') {
+                if (currentOrg === '发布网点') {
+                    if (interceptStatus === '拦截中') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">撤销</span>`);
+                    } else {
+                        if (processStatus === '待处理') {
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">撤销</span>`);
+                        } else {
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        }
+                    }
+                } else {
+                    if (interceptStatus === '拦截中') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">拦截</span>`);
+                    } else {
+                        if (processStatus === '待处理') {
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">退货</span>`);
+                        } else {
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        }
+                    }
+                }
+            } else if (status === 'intercept-wait') {
+                if (currentOrg === '发布网点') {
+                    if (interceptStatus === '拦截中') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">撤销</span>`);
+                    } else {
+                        if (processStatus === '待处理') {
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">放货</span>`);
+                        } else {
+                            buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        }
+                    }
+                } else {
+                    if (interceptStatus === '拦截中') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">拦截</span>`);
+                    } else {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                    }
+                }
+            } else if (status === 'address-warning') {
+                if (currentOrg === '发布网点') {
+                    if (processStatus === '待处理') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">撤销</span>`);
+                    } else {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                    }
+                } else {
+                    if (processStatus === '待处理') {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">处理</span>`);
+                    } else {
+                        buttons.push(`<span class="action-link" onclick="viewDetail('${orderNo}')">查看</span>`);
+                    }
+                }
+            }
+            
+            actionCell.innerHTML = buttons.join('');
+        }
+        
+        // 初始化所有行的操作按钮
+        function initActionButtons() {
+            document.querySelectorAll('tbody tr').forEach(row => {
+                generateActionButtons(row);
+            });
+        }
+        
+        // 查询按钮
+        const queryBtn = document.querySelector('.filter-section .btn-primary');
+        if (queryBtn) {
+            queryBtn.addEventListener('click', function() {
+                const inputs = document.querySelectorAll('.filter-section .filter-input');
+                const selects = document.querySelectorAll('.filter-section .filter-select');
+                
+                const orderNo = inputs[0].value.trim();
+                const processBranch = inputs[1].value.trim();
+                const publishBranch = inputs[2].value.trim();
+                const exceptionType = selects[0].value;
+                const processStatus = selects[1].value;
+                
+                filterByConditions(orderNo, processBranch, publishBranch, exceptionType, processStatus);
+            });
+        }
+        
+        // 根据筛选条件过滤表格
+        function filterByConditions(orderNo, processBranch, publishBranch, exceptionType, processStatus) {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const rowOrderNo = row.cells[0].textContent.trim();
+                const rowProcessBranch = row.cells[2].textContent.trim();
+                const rowPublishBranch = row.cells[3].textContent.trim();
+                const rowStatus = row.dataset.status;
+                const rowProcessStatus = row.dataset.processStatus;
+                
+                const orderNoMatch = !orderNo || rowOrderNo.includes(orderNo);
+                const processBranchMatch = !processBranch || rowProcessBranch.includes(processBranch);
+                const publishBranchMatch = !publishBranch || rowPublishBranch.includes(publishBranch);
+                const exceptionTypeMatch = !exceptionType || rowStatus === exceptionType;
+                const processStatusMatch = !processStatus || rowProcessStatus === processStatus;
+                
+                if (orderNoMatch && processBranchMatch && publishBranchMatch && exceptionTypeMatch && processStatusMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            showNotification('查询成功', 'success');
+        }
+        
+        // 重置按钮
+        const resetBtn = document.querySelector('.filter-section .btn-default');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                const inputs = document.querySelectorAll('.filter-section .filter-input');
+                const selects = document.querySelectorAll('.filter-section .filter-select');
+                
+                inputs.forEach(input => input.value = '');
+                selects.forEach(select => select.value = '');
+                
+                const rows = document.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    row.style.display = '';
+                });
+                
+                showNotification('已重置', 'info');
+            });
+        }
+        
+        // 关闭详情页
+        function closeDetailModal() {
+            const modal = document.getElementById('detailModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+        
+        // 查看详情
+        function viewDetail(orderNo) {
+            const modal = document.getElementById('detailModal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+        
+        // 关闭详情页
+        function closeDetailModal() {
+            const modal = document.getElementById('detailModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+        
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            initActionButtons();
+        });
+        
+        // 打开上报拦截件弹窗
+        function openReportModal() {
+            const modal = document.getElementById('reportModal');
+            modal.classList.add('active');
+        }
+
+        // 关闭弹窗
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+        }
+        </script></body>
+</html>

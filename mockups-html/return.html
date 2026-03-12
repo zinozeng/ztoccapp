@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>拦截件-退货</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero orange">
+        <div class="hero-top">
+          <div>
+            <h1>异常运单详情</h1>
+            <div class="crumb">运单管理 / 异常运单 / 退货查看</div>
+          </div>
+          <a class="btn" href="./index.html">返回总览</a>
+        </div>
+        <div class="hero-bottom">
+          <span class="pill warn">拦截件-退货</span>
+          <span class="meta">当前状态 <b>退货登记完成</b></span>
+          <span class="meta">可见范围 <b>发起退货网点</b></span>
+        </div>
+      </section>
+
+      <section class="notice warn">该异常类型仅发起退货网点可查看，不支持修改。</section>
+
+      <section class="layout">
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">运单基础信息</h2>
+            <p class="section-subtitle">只读展示，不提供操作控件</p>
+            <div class="card-soft">
+              <div class="grid-3">
+                <div>
+                  <div class="field-label">运单号</div>
+                  <div class="field-value">ZT202603030002</div>
+                </div>
+                <div>
+                  <div class="field-label">客户名称</div>
+                  <div class="field-value">XX 食品有限公司</div>
+                </div>
+                <div>
+                  <div class="field-label">当前状态</div>
+                  <div class="field-value">退货处理中</div>
+                </div>
+              </div>
+              <div class="grid-3" style="margin-top: 28px">
+                <div>
+                  <div class="field-label">寄件网点</div>
+                  <div class="field-body">上海寄件网点</div>
+                </div>
+                <div>
+                  <div class="field-label">派件网点</div>
+                  <div class="field-body">杭州派件网点</div>
+                </div>
+                <div>
+                  <div class="field-label">货品信息</div>
+                  <div class="field-body">冷链食品 / 3件 / 25KG</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">退货异常信息</h2>
+            <div class="card-soft">
+              <div class="grid-3">
+                <div>
+                  <div class="field-label">退货发起网点</div>
+                  <div class="field-value">上海寄件网点</div>
+                </div>
+                <div>
+                  <div class="field-label">登记人</div>
+                  <div class="field-value">张三</div>
+                </div>
+                <div>
+                  <div class="field-label">登记时间</div>
+                  <div class="field-value">2026-03-03 09:40</div>
+                </div>
+              </div>
+              <div class="grid-2" style="margin-top: 28px">
+                <div>
+                  <div class="field-label">退货原因</div>
+                  <div class="field-value">客户拒收</div>
+                </div>
+                <div>
+                  <div class="field-label">附件凭证</div>
+                  <div class="field-body">拒收凭证 2 份，可点击查看</div>
+                </div>
+              </div>
+              <div style="margin-top: 28px">
+                <div class="field-label">退货说明</div>
+                <div class="field-body">客户无法联系且已超约定时限，网点登记退回，仅保留查看和追踪能力。</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">流程状态</h2>
+            <div class="steps progress-3 orange">
+              <div class="step active orange">
+                <div class="step-dot"></div>
+                <div class="step-label">退货登记</div>
+              </div>
+              <div class="step active orange">
+                <div class="step-dot"></div>
+                <div class="step-label">仅查看</div>
+              </div>
+            </div>
+            <div class="card-soft" style="margin-top: 24px; background: #fff7ed">
+              <div class="field-label">当前节点</div>
+              <div class="field-value" style="color: #9a3412">退货登记完成</div>
+              <div class="field-body" style="margin-top: 12px">
+                当前页面用于回看退货原因、附件和时间线，不开放编辑。
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">权限说明</h2>
+            <div class="card-soft">
+              <div class="grid-2">
+                <div class="field-label">当前登录角色</div>
+                <div class="field-body">发起退货网点</div>
+                <div class="field-label">当前可执行动作</div>
+                <div class="field-body">仅查看</div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="bottom-bar">
+        <div class="bottom-note">查看型页面采用大段只读信息和弱化按钮，避免误导用户存在可编辑能力。</div>
+        <div class="button-row">
+          <div class="btn">返回</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

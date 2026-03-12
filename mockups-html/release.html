@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>拦截件-等放货通知</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero blue">
+        <div class="hero-top">
+          <div>
+            <h1>异常运单详情</h1>
+            <div class="crumb">运单管理 / 异常运单 / 等放货通知查看</div>
+          </div>
+          <a class="btn" href="./index.html">返回总览</a>
+        </div>
+        <div class="hero-bottom">
+          <span class="pill info">拦截件-等放货通知</span>
+          <span class="meta">当前状态 <b>待放货通知</b></span>
+        </div>
+      </section>
+
+      <section class="notice info">该运单处于等待放货通知状态，寄件网点和派件网点均可查看，暂不支持操作。</section>
+
+      <section class="layout">
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">运单基础信息</h2>
+            <div class="card-soft">
+              <div class="grid-3">
+                <div>
+                  <div class="field-label">寄件网点</div>
+                  <div class="field-value">上海寄件网点</div>
+                </div>
+                <div>
+                  <div class="field-label">派件网点</div>
+                  <div class="field-value">杭州派件网点</div>
+                </div>
+                <div>
+                  <div class="field-label">货品信息</div>
+                  <div class="field-value">鲜食冷链 / 4件 / 32KG</div>
+                </div>
+              </div>
+              <div style="margin-top: 28px">
+                <div class="field-label">收件信息</div>
+                <div class="field-body">李先生 / 139xxxx0002 / 杭州市余杭区文一西路 999 号</div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">等放货通知信息</h2>
+            <div class="card-soft">
+              <div class="grid-3">
+                <div>
+                  <div class="field-label">等放货原因</div>
+                  <div class="field-value">货物暂缓出库</div>
+                </div>
+                <div>
+                  <div class="field-label">发起人</div>
+                  <div class="field-value">张三</div>
+                </div>
+                <div>
+                  <div class="field-label">发起时间</div>
+                  <div class="field-value">2026-03-03 08:30</div>
+                </div>
+              </div>
+              <div style="margin-top: 28px">
+                <div class="field-label">放货说明</div>
+                <div class="field-body">
+                  客户要求待渠道确认后再放货，运单需保持在等待状态，网点只做信息同步与跟踪。
+                </div>
+              </div>
+              <div style="margin-top: 24px">
+                <div class="field-label">附件凭证</div>
+                <div class="field-body">放货待确认截图 1 份，可点击查看</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">流程状态</h2>
+            <div class="steps progress-3 blue">
+              <div class="step active blue">
+                <div class="step-dot"></div>
+                <div class="step-label">异常登记完成</div>
+              </div>
+              <div class="step active blue">
+                <div class="step-dot"></div>
+                <div class="step-label">等待放货通知</div>
+              </div>
+            </div>
+            <div class="card-soft" style="margin-top: 24px; background: #eff6ff">
+              <div class="field-label">当前节点</div>
+              <div class="field-value" style="color: #1d4ed8">待放货通知</div>
+              <div class="field-body" style="margin-top: 12px">
+                页面重点突出等待中的状态，不放置操作按钮，避免误导用户执行处理。
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">权限说明</h2>
+            <div class="card-soft">
+              <div class="grid-2">
+                <div class="field-label">当前可见范围</div>
+                <div class="field-body">寄件网点、派件网点</div>
+                <div class="field-label">当前可执行动作</div>
+                <div class="field-body">仅查看</div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="bottom-bar">
+        <div class="bottom-note">等待型异常采用蓝色提示和完整时间线，强调“状态同步”而不是“人工处理”。</div>
+        <div class="button-row">
+          <div class="btn">返回</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

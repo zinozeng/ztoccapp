@@ -1,0 +1,90 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1600" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4F8FC"/>
+      <stop offset="1" stop-color="#EEF6FB"/>
+    </linearGradient>
+    <linearGradient id="hero3" x1="80" y1="84" x2="1520" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F3B57"/>
+      <stop offset="1" stop-color="#0F6B8C"/>
+    </linearGradient>
+    <filter id="shadow3" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#A7B6C8" flood-opacity="0.25"/>
+    </filter>
+    <style>
+      .t{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif}
+      .h1{font-size:34px;font-weight:700;fill:#FFF}
+      .s1{font-size:15px;font-weight:500;fill:#C9E3EE}
+      .title{font-size:22px;font-weight:700;fill:#203044}
+      .sub{font-size:15px;font-weight:500;fill:#7B8AA0}
+      .k{font-size:14px;font-weight:500;fill:#6B7A90}
+      .v{font-size:18px;font-weight:700;fill:#203044}
+      .body{font-size:15px;font-weight:500;fill:#324255}
+      .chip{font-size:14px;font-weight:700;fill:#0F4C81}
+      .btn{font-size:18px;font-weight:700;fill:#324255}
+    </style>
+  </defs>
+  <rect width="1600" height="1200" fill="url(#bg3)"/>
+  <rect x="80" y="84" width="1440" height="150" rx="28" fill="url(#hero3)" filter="url(#shadow3)"/>
+  <text x="124" y="138" class="t h1">异常运单详情</text>
+  <text x="124" y="173" class="t s1">运单管理 / 异常运单 / 等放货通知查看</text>
+  <rect x="124" y="190" width="210" height="44" rx="22" fill="#DBEAFE"/>
+  <text x="152" y="218" class="t chip">拦截件-等放货通知</text>
+  <text x="392" y="214" class="t s1">当前状态</text>
+  <text x="472" y="214" class="t" style="font-size:17px;font-weight:700;fill:#FFF">待放货通知</text>
+
+  <rect x="80" y="274" width="1440" height="94" rx="24" fill="#EFF6FF" filter="url(#shadow3)"/>
+  <text x="120" y="324" class="t" style="font-size:18px;font-weight:700;fill:#1D4ED8">该运单处于等待放货通知状态，寄件网点和派件网点均可查看，暂不支持操作。</text>
+
+  <rect x="80" y="402" width="930" height="638" rx="28" fill="#FFF" filter="url(#shadow3)"/>
+  <rect x="1042" y="402" width="478" height="638" rx="28" fill="#FFF" filter="url(#shadow3)"/>
+
+  <text x="120" y="456" class="t title">运单基础信息</text>
+  <rect x="120" y="500" width="850" height="144" rx="18" fill="#F6FAFD"/>
+  <text x="152" y="542" class="t k">寄件网点</text>
+  <text x="152" y="570" class="t v">上海寄件网点</text>
+  <text x="432" y="542" class="t k">派件网点</text>
+  <text x="432" y="570" class="t v">杭州派件网点</text>
+  <text x="704" y="542" class="t k">货品信息</text>
+  <text x="704" y="570" class="t v">鲜食冷链 / 4件 / 32KG</text>
+  <text x="152" y="616" class="t k">收件信息</text>
+  <text x="152" y="640" class="t body">李先生 / 139xxxx0002 / 杭州市余杭区文一西路 999 号</text>
+
+  <text x="120" y="714" class="t title">等放货通知信息</text>
+  <rect x="120" y="758" width="850" height="242" rx="18" fill="#F6FAFD"/>
+  <text x="152" y="800" class="t k">等放货原因</text>
+  <text x="152" y="828" class="t v">货物暂缓出库</text>
+  <text x="432" y="800" class="t k">发起人</text>
+  <text x="432" y="828" class="t v">张三</text>
+  <text x="652" y="800" class="t k">发起时间</text>
+  <text x="652" y="828" class="t v">2026-03-03 08:30</text>
+  <text x="152" y="876" class="t k">放货说明</text>
+  <text x="152" y="904" class="t body">客户要求待渠道确认后再放货，运单需保持在等待状态，网点只做信息同步与跟踪。</text>
+  <text x="152" y="956" class="t k">附件凭证</text>
+  <text x="152" y="984" class="t body">放货待确认截图 1 份，可点击查看</text>
+
+  <text x="1082" y="456" class="t title">流程状态</text>
+  <line x1="1120" y1="532" x2="1448" y2="532" stroke="#DDE8F1" stroke-width="6" stroke-linecap="round"/>
+  <line x1="1120" y1="532" x2="1448" y2="532" stroke="#0EA5E9" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="1120" cy="532" r="22" fill="#0EA5E9"/>
+  <circle cx="1448" cy="532" r="22" fill="#0EA5E9"/>
+  <text x="1084" y="584" class="t body">异常登记完成</text>
+  <text x="1402" y="584" class="t body">等待放货通知</text>
+
+  <rect x="1082" y="644" width="398" height="132" rx="20" fill="#EFF6FF"/>
+  <text x="1110" y="684" class="t k">当前节点</text>
+  <text x="1110" y="718" class="t" style="font-size:24px;font-weight:700;fill:#1D4ED8">待放货通知</text>
+  <text x="1110" y="750" class="t body">页面重点突出等待中的状态，不放置操作按钮，避免误导用户执行处理。</text>
+
+  <text x="1082" y="834" class="t title">权限说明</text>
+  <rect x="1082" y="862" width="398" height="126" rx="20" fill="#F6FAFD"/>
+  <text x="1110" y="902" class="t k">当前可见范围</text>
+  <text x="1244" y="902" class="t body">寄件网点、派件网点</text>
+  <text x="1110" y="942" class="t k">当前可执行动作</text>
+  <text x="1244" y="942" class="t body">仅查看</text>
+
+  <rect x="80" y="1074" width="1440" height="86" rx="28" fill="#FFF" filter="url(#shadow3)"/>
+  <text x="124" y="1123" class="t body">等待型异常采用蓝色提示和完整时间线，强调“状态同步”而不是“人工处理”。</text>
+  <rect x="1340" y="1091" width="140" height="52" rx="16" fill="#FFF" stroke="#D0D8E2"/>
+  <text x="1392" y="1123" class="t btn">返回</text>
+</svg>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>地址预警</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero gold">
+        <div class="hero-top">
+          <div>
+            <h1>异常运单详情</h1>
+            <div class="crumb">运单管理 / 异常运单 / 地址预警确认</div>
+          </div>
+          <a class="btn" href="./index.html">返回总览</a>
+        </div>
+        <div class="hero-bottom">
+          <span class="pill yellow">地址预警</span>
+          <span class="meta">当前状态 <b>待寄件网点确认</b></span>
+        </div>
+      </section>
+
+      <section class="layout">
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">运单基础信息</h2>
+            <div class="card-soft" style="background: #fffbf3">
+              <div class="grid-2">
+                <div>
+                  <div class="field-label">收件人</div>
+                  <div class="field-value">李先生 / 139xxxx0002</div>
+                </div>
+                <div>
+                  <div class="field-label">寄件网点</div>
+                  <div class="field-value">上海寄件网点</div>
+                </div>
+              </div>
+              <div style="margin-top: 28px">
+                <div class="field-label">原始收件地址</div>
+                <div class="field-body">杭州市余杭区五常街道文一西路 999 号 3 栋</div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">预警信息</h2>
+            <div class="card-soft" style="background: #fffbf3">
+              <div class="grid-2">
+                <div>
+                  <div class="field-label">系统预警内容</div>
+                  <div class="field-value">收件地址疑似不完整</div>
+                </div>
+                <div>
+                  <div class="field-label">触发时间</div>
+                  <div class="field-value">2026-03-03 12:15</div>
+                </div>
+              </div>
+              <div style="margin-top: 28px">
+                <div class="field-label">预警原因</div>
+                <div class="field-body">缺少门牌号和楼层信息，可能影响派送时效，需要寄件网点确认地址是否准确。</div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">确认处理区</h2>
+            <p class="section-subtitle">寄件网点可确认“地址无误”或补充修正信息</p>
+            <div class="choice-row">
+              <div class="choice active yellow">
+                <span class="radio"></span>
+                <span>地址无误</span>
+              </div>
+              <div class="choice">
+                <span class="radio"></span>
+                <span>地址需修正</span>
+              </div>
+            </div>
+            <div class="textarea" style="margin-top: 20px; background: #fffbf3">
+              <div class="field-label">确认说明</div>
+              <div class="field-body">已电话复核，地址信息正确。</div>
+            </div>
+          </section>
+        </div>
+
+        <div class="panel stack">
+          <section>
+            <h2 class="section-title">流程状态</h2>
+            <div class="steps progress-3 yellow">
+              <div class="step active yellow">
+                <div class="step-dot"></div>
+                <div class="step-label">系统预警</div>
+              </div>
+              <div class="step active yellow">
+                <div class="step-dot"></div>
+                <div class="step-label">寄件网点确认</div>
+              </div>
+            </div>
+            <div class="card-soft" style="margin-top: 24px; background: #fef3c7">
+              <div class="field-label">当前节点</div>
+              <div class="field-value" style="color: #a16207">待寄件网点确认</div>
+              <div class="field-body" style="margin-top: 12px">
+                仅寄件网点可见并完成确认；若地址需修正，则在当前区域展开地址修改表单。
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">权限说明</h2>
+            <div class="card-soft" style="background: #fffbf3">
+              <div class="grid-2">
+                <div class="field-label">当前登录角色</div>
+                <div class="field-body">寄件网点</div>
+                <div class="field-label">当前可见范围</div>
+                <div class="field-body">寄件网点</div>
+                <div class="field-label">当前可执行动作</div>
+                <div class="field-body">确认</div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="section-title">处理记录</h2>
+            <div class="timeline">
+              <div class="timeline-item" style="background: #fffbf3">2026-03-03 12:15 系统触发地址预警</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="bottom-bar">
+        <div class="bottom-note">确认型页面尽量收敛字段，优先突出预警原因与确认结果。</div>
+        <div class="button-row">
+          <div class="btn">取消</div>
+          <div class="btn primary gold">确认</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
