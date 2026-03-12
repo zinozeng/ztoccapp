@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>到件预报详情</title>
+    <title>到件预报下钻</title>
     <style>
         * {
             margin: 0;
@@ -62,6 +62,31 @@
             flex: 1;
         }
 
+        .filter-bar {
+            background: white;
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            background: #f5f7fa;
+            border: none;
+            border-radius: 16px;
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: #0066cc;
+            color: #fff;
+        }
+
         .main-content {
             padding: 16px;
         }
@@ -77,27 +102,26 @@
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 12px;
             margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .summary-item {
-            background: #f8f9ff;
-            border-radius: 6px;
-            padding: 10px;
             text-align: center;
         }
 
-        .summary-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #0066cc;
+        .summary-label {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 6px;
         }
 
-        .summary-label {
-            font-size: 10px;
-            color: #999;
-            margin-top: 4px;
+        .summary-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0066cc;
         }
 
         .section-title {
@@ -150,41 +174,47 @@
         <header class="header">
             <div class="header-top">
                 <button class="back-btn" onclick="history.back()">‹</button>
-                <h1 class="header-title" id="pageTitle">到件预报详情</h1>
+                <h1 class="header-title" id="pageTitle">到件预报</h1>
             </div>
         </header>
+
+        <div class="filter-bar">
+            <button class="filter-btn active">全部</button>
+            <button class="filter-btn">零担</button>
+            <button class="filter-btn">冷链快递</button>
+            <button class="filter-btn">冷链小件</button>
+            <button class="filter-btn">鲸确达</button>
+        </div>
 
         <main class="main-content">
             <div class="card">
                 <div class="summary-grid">
                     <div class="summary-item">
+                        <div class="summary-label">总票号</div>
                         <div class="summary-value" id="totalTickets">34</div>
-                        <div class="summary-label">票数</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-value" id="totalCount">110</div>
+                        <div class="summary-label">开单票数</div>
+                        <div class="summary-value" id="orderTickets">34</div>
+                    </div>
+                    <div class="summary-item">
                         <div class="summary-label">件数</div>
+                        <div class="summary-value" id="totalCount">110</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-value" id="totalWeight">1342.49</div>
-                        <div class="summary-label">重量 (kg)</div>
-                    </div>
-                    <div class="summary-item">
+                        <div class="summary-label">体积</div>
                         <div class="summary-value" id="totalVolume">3.68</div>
-                        <div class="summary-label">体积 (m³)</div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card">
-                <div class="section-title">明细列表（共 <span id="listCount">34</span> 条）</div>
+                <div class="section-title">明细列表</div>
                 <div class="data-table-wrapper">
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th>运单号</th>
-                                <th>票数</th>
-                                <th>重量 (kg)</th>
+                                <th>托数</th>
+                                <th>重量</th>
                                 <th>体积 (m³)</th>
                                 <th>产品名称</th>
                                 <th>备注</th>
@@ -221,7 +251,7 @@
                             </tr>
                             <tr>
                                 <td>ZTO202501235</td>
-                                <td>1</td>
+                                <td>2</td>
                                 <td>55.2</td>
                                 <td>0.18</td>
                                 <td>零担</td>
@@ -250,17 +280,17 @@
 
         const config = {
             'normal': {
-                title: '开单未发到件预报',
+                title: '到件预报',
                 tickets: '34',
+                orderTickets: '34',
                 count: '110',
-                weight: '1342.49',
                 volume: '3.68'
             },
             'transit': {
                 title: '已发中心未到（汽运）到件预报',
                 tickets: '48',
+                orderTickets: '48',
                 count: '156',
-                weight: '1917.88',
                 volume: '7.5229'
             }
         };
@@ -269,10 +299,17 @@
 
         document.getElementById('pageTitle').textContent = currentConfig.title;
         document.getElementById('totalTickets').textContent = currentConfig.tickets;
+        document.getElementById('orderTickets').textContent = currentConfig.orderTickets;
         document.getElementById('totalCount').textContent = currentConfig.count;
-        document.getElementById('totalWeight').textContent = currentConfig.weight;
         document.getElementById('totalVolume').textContent = currentConfig.volume;
-        document.getElementById('listCount').textContent = currentConfig.tickets;
+
+        // 过滤按钮点击事件
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
     </script>
 </body>
 </html>
