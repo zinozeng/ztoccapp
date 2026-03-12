@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>二级占比详情</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+        }
+
+        .back-btn:active {
+            opacity: 0.6;
+        }
+
+        .header-title {
+            color: #333;
+            font-size: 17px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .main-content {
+            padding: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .summary-percentage {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0066cc;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .data-item {
+            background: #f8f9ff;
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .data-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .data-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .trend-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .trend-up {
+            background: #ffe6e6;
+            color: #ff4d4f;
+        }
+
+        .trend-down {
+            background: #e6f7e6;
+            color: #52c41a;
+        }
+
+        .chart-box {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 180px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .data-table th {
+            background: #f5f7fa;
+            padding: 10px 6px;
+            text-align: left;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px 6px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        @media (max-width: 375px) {
+            .summary-percentage {
+                font-size: 32px;
+            }
+            
+            .chart-container {
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <header class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">‹</button>
+                <h1 class="header-title" id="pageTitle">二级发件占比详情</h1>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <div class="summary-box">
+                    <div class="summary-percentage" id="mainPercentage">20.7%</div>
+                    <div class="summary-label" id="mainLabel">二级发件占比</div>
+                </div>
+
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-label">环比</div>
+                        <div class="data-value">+12%</div>
+                        <span class="trend-badge trend-up">↑</span>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">同比</div>
+                        <div class="data-value">+8%</div>
+                        <span class="trend-badge trend-up">↑</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">产品类型分布</div>
+                <div class="chart-box">
+                    <div class="chart-container">
+                        <canvas id="productChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">明细数据</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>产品类型</th>
+                            <th>重量 (KG)</th>
+                            <th>票数</th>
+                            <th>占比</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01.30</td>
+                            <td>零担</td>
+                            <td>8,230.5</td>
+                            <td>325</td>
+                            <td>7.3%</td>
+                        </tr>
+                        <tr>
+                            <td>01.30</td>
+                            <td>冷链快递</td>
+                            <td>5,450.8</td>
+                            <td>218</td>
+                            <td>4.9%</td>
+                        </tr>
+                        <tr>
+                            <td>01.30</td>
+                            <td>冷链小件</td>
+                            <td>3,680.2</td>
+                            <td>156</td>
+                            <td>3.3%</td>
+                        </tr>
+                        <tr>
+                            <td>01.30</td>
+                            <td>鲸确达 - 零担</td>
+                            <td>2,560.4</td>
+                            <td>98</td>
+                            <td>2.3%</td>
+                        </tr>
+                        <tr>
+                            <td>01.30</td>
+                            <td>鲸确达 - 小件</td>
+                            <td>2,317.33</td>
+                            <td>87</td>
+                            <td>2.1%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+        
+        if (type === 'receive') {
+            document.getElementById('pageTitle').textContent = '二级派件占比详情';
+            document.getElementById('mainLabel').textContent = '二级派件占比';
+            document.getElementById('mainPercentage').textContent = '18.7%';
+        }
+
+        const ctx = document.getElementById('productChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['零担', '冷链快递', '冷链小件', '鲸确达 - 零担', '鲸确达 - 小件'],
+                datasets: [{
+                    data: [35.2, 26.3, 17.8, 12.3, 8.4],
+                    backgroundColor: [
+                        'rgba(0, 102, 204, 0.8)',
+                        'rgba(0, 153, 76, 0.8)',
+                        'rgba(255, 153, 0, 0.8)',
+                        'rgba(153, 0, 153, 0.8)',
+                        'rgba(255, 102, 102, 0.8)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 15,
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
