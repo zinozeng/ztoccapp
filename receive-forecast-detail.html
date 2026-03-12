@@ -192,23 +192,18 @@
             </div>
             <div class="filter-bar">
                 <select class="filter-select" id="orgSelect">
-                    <option value="all">全部产品</option>
-                    <option value="lt">零担</option>
-                    <option value="kd">冷链快递</option>
-                    <option value="xj">冷链小件</option>
-                    <option value="jqd">鲸确达</option>
+                    <option value="current">当前机构</option>
+                    <option value="shanghai">上海青浦一部</option>
+                    <option value="beijing">北京朝阳</option>
+                    <option value="guangzhou">广州天河</option>
                 </select>
                 <select class="filter-select" id="statusSelect">
-                    <option value="all">开单票数</option>
-                    <option value="normal">开单未发</option>
-                    <option value="waiting">开单未发（待配载）</option>
-                    <option value="transit">已发中心未到（汽运）</option>
-                    <option value="arrived-road">省中心已到未发（汽运）</option>
-                    <option value="arrived-line">省中心已到未发（专线）</option>
-                    <option value="unloading">中心已卸未扫（待卸中）</option>
-                    <option value="loading">中心已卸未扫（待装车）</option>
-                    <option value="loaded">已卸未扫（待装车）</option>
-                    <option value="in-vehicle">已装车</option>
+                    <option value="all">运单状态</option>
+                    <option value="unloading-car">未卸车</option>
+                    <option value="unloaded-not-scanned">已卸未扫</option>
+                    <option value="waiting-delivery">待派件</option>
+                    <option value="delivering">派送中</option>
+                    <option value="signed">已签收</option>
                 </select>
                 <select class="filter-select" id="dateSelect">
                     <option value="today">今日</option>
