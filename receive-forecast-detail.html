@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>到件预报下钻</title>
+    <title>到件预报</title>
     <style>
         * {
             margin: 0;
@@ -27,7 +27,7 @@
 
         .header {
             background: white;
-            padding: 12px 16px;
+            padding: 0;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -37,7 +37,8 @@
         .header-top {
             display: flex;
             align-items: center;
-            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .back-btn {
@@ -60,75 +61,86 @@
             font-size: 17px;
             font-weight: 600;
             flex: 1;
+            text-align: center;
+            padding-right: 24px;
         }
 
         .filter-bar {
-            background: white;
-            padding: 12px 16px;
             display: flex;
+            padding: 10px 16px;
             gap: 8px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            background: white;
         }
 
-        .filter-btn {
-            padding: 6px 12px;
+        .filter-select {
+            flex: 1;
+            padding: 6px 8px;
             background: #f5f7fa;
             border: none;
-            border-radius: 16px;
+            border-radius: 4px;
             font-size: 12px;
-            color: #666;
-            white-space: nowrap;
+            color: #333;
             cursor: pointer;
+            text-align: center;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23666' d='M0 0l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 24px;
         }
 
-        .filter-btn.active {
-            background: #0066cc;
-            color: #fff;
+        .filter-select:focus {
+            outline: none;
+            background-color: #e8f0ff;
         }
 
         .main-content {
-            padding: 16px;
+            padding: 0;
         }
 
         .card {
             background: white;
-            border-radius: 12px;
-            padding: 16px;
             margin-bottom: 12px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #f0f0f0;
+        .section-header {
+            background: #f5f7fa;
+            padding: 10px 12px;
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
         }
 
-        .summary-item {
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary-table td {
+            padding: 12px 8px;
             text-align: center;
-        }
-
-        .summary-label {
-            font-size: 11px;
-            color: #999;
-            margin-bottom: 6px;
+            border: 1px solid #e0e0e0;
         }
 
         .summary-value {
-            font-size: 18px;
-            font-weight: 600;
-            color: #0066cc;
-        }
-
-        .section-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             color: #333;
-            margin-bottom: 12px;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 10px;
+            color: #999;
+        }
+
+        .data-section-header {
+            background: #f5f7fa;
+            padding: 10px 12px;
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
         }
 
         .data-table-wrapper {
@@ -144,28 +156,30 @@
 
         .data-table th {
             background: #f5f7fa;
-            padding: 10px 6px;
+            padding: 10px 8px;
             text-align: left;
             color: #666;
-            font-weight: 600;
+            font-weight: 500;
             white-space: nowrap;
+            border: 1px solid #e0e0e0;
         }
 
         .data-table td {
-            padding: 12px 6px;
+            padding: 12px 8px;
             border-bottom: 1px solid #f0f0f0;
+            border: 1px solid #e0e0e0;
             color: #333;
-            white-space: nowrap;
         }
 
         .data-table tr:last-child td {
-            border-bottom: none;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .empty-state {
             text-align: center;
             padding: 40px 0;
             color: #999;
+            font-size: 13px;
         }
     </style>
 </head>
@@ -174,98 +188,90 @@
         <header class="header">
             <div class="header-top">
                 <button class="back-btn" onclick="history.back()">‹</button>
-                <h1 class="header-title" id="pageTitle">到件预报</h1>
+                <h1 class="header-title">到件预报</h1>
+            </div>
+            <div class="filter-bar">
+                <select class="filter-select" id="orgSelect">
+                    <option value="all">全部产品</option>
+                    <option value="lt">零担</option>
+                    <option value="kd">冷链快递</option>
+                    <option value="xj">冷链小件</option>
+                    <option value="jqd">鲸确达</option>
+                </select>
+                <select class="filter-select" id="statusSelect">
+                    <option value="all">开单票 numbers</option>
+                    <option value="normal">开单未发</option>
+                    <option value="waiting">开单未发（待配载）</option>
+                    <option value="transit">已发中心未到（汽运）</option>
+                    <option value="arrived-road">省中心已到未发（汽运）</option>
+                    <option value="arrived-line">省中心已到未发（专线）</option>
+                    <option value="unloading">中心已卸未扫（待卸中）</option>
+                    <option value="loading">中心已卸未扫（待装车）</option>
+                    <option value="loaded">已卸未扫（待装车）</option>
+                    <option value="in-vehicle">已装车</option>
+                </select>
+                <select class="filter-select" id="dateSelect">
+                    <option value="today">今日</option>
+                    <option value="3days">近 3 日</option>
+                    <option value="7days">近 7 日</option>
+                    <option value="30days">近 30 日</option>
+                </select>
             </div>
         </header>
 
-        <div class="filter-bar">
-            <button class="filter-btn active">全部</button>
-            <button class="filter-btn">零担</button>
-            <button class="filter-btn">冷链快递</button>
-            <button class="filter-btn">冷链小件</button>
-            <button class="filter-btn">鲸确达</button>
-        </div>
-
         <main class="main-content">
+            <!-- 汇总信息 -->
             <div class="card">
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <div class="summary-label">总票号</div>
-                        <div class="summary-value" id="totalTickets">34</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">开单票数</div>
-                        <div class="summary-value" id="orderTickets">34</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">件数</div>
-                        <div class="summary-value" id="totalCount">110</div>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-label">体积</div>
-                        <div class="summary-value" id="totalVolume">3.68</div>
-                    </div>
-                </div>
+                <div class="section-header">汇总信息（今日）</div>
+                <table class="summary-table">
+                    <tr>
+                        <td>
+                            <div class="summary-value" id="totalTickets">34</div>
+                            <div class="summary-label">总票数</div>
+                        </td>
+                        <td>
+                            <div class="summary-value" id="totalWeight">1342.49</div>
+                            <div class="summary-label">总重量 (kg)</div>
+                        </td>
+                        <td>
+                            <div class="summary-value" id="totalVolume">3.66</div>
+                            <div class="summary-label">总体积 (m³)</div>
+                        </td>
+                        <td>
+                            <div class="summary-value" id="totalCount">110</div>
+                            <div class="summary-label">总件数</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-                <div class="section-title">明细列表</div>
+            <!-- 运单明细 -->
+            <div class="card">
+                <div class="data-section-header">运单明细（今日）</div>
                 <div class="data-table-wrapper">
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th>运单号</th>
-                                <th>托数</th>
-                                <th>重量</th>
+                                <th>件数</th>
+                                <th>重量 (kg)</th>
                                 <th>体积 (m³)</th>
-                                <th>产品名称</th>
-                                <th>备注</th>
-                                <th>操作时间</th>
+                                <th>到付金额 (元)</th>
+                                <th>产品类型</th>
+                                <th>温区</th>
+                                <th>收件地址</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
                             <tr>
-                                <td>ZTO202501232</td>
-                                <td>1</td>
-                                <td>35.5</td>
-                                <td>0.12</td>
-                                <td>零担</td>
-                                <td>-</td>
-                                <td>01-30 10:23</td>
-                            </tr>
-                            <tr>
-                                <td>ZTO202501233</td>
-                                <td>1</td>
-                                <td>42.8</td>
-                                <td>0.15</td>
-                                <td>冷链快递</td>
-                                <td>-</td>
-                                <td>01-30 10:45</td>
-                            </tr>
-                            <tr>
-                                <td>ZTO202501234</td>
-                                <td>1</td>
-                                <td>28.3</td>
-                                <td>0.09</td>
-                                <td>冷链小件</td>
-                                <td>-</td>
-                                <td>01-30 11:12</td>
-                            </tr>
-                            <tr>
-                                <td>ZTO202501235</td>
-                                <td>2</td>
-                                <td>55.2</td>
-                                <td>0.18</td>
-                                <td>零担</td>
-                                <td>-</td>
-                                <td>01-30 11:38</td>
-                            </tr>
-                            <tr>
-                                <td>ZTO202501236</td>
-                                <td>1</td>
-                                <td>31.6</td>
-                                <td>0.11</td>
-                                <td>鲸确达 - 零担</td>
-                                <td>-</td>
-                                <td>01-30 12:05</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -280,35 +286,37 @@
 
         const config = {
             'normal': {
-                title: '到件预报',
                 tickets: '34',
-                orderTickets: '34',
-                count: '110',
-                volume: '3.68'
+                weight: '1342.49',
+                volume: '3.66',
+                count: '110'
             },
             'transit': {
-                title: '已发中心未到（汽运）到件预报',
                 tickets: '48',
-                orderTickets: '48',
-                count: '156',
-                volume: '7.5229'
+                weight: '1917.88',
+                volume: '7.52',
+                count: '156'
             }
         };
 
         const currentConfig = config[type] || config['normal'];
 
-        document.getElementById('pageTitle').textContent = currentConfig.title;
         document.getElementById('totalTickets').textContent = currentConfig.tickets;
-        document.getElementById('orderTickets').textContent = currentConfig.orderTickets;
-        document.getElementById('totalCount').textContent = currentConfig.count;
+        document.getElementById('totalWeight').textContent = currentConfig.weight;
         document.getElementById('totalVolume').textContent = currentConfig.volume;
+        document.getElementById('totalCount').textContent = currentConfig.count;
 
-        // 过滤按钮点击事件
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
+        // 筛选器事件
+        document.getElementById('orgSelect').addEventListener('change', function() {
+            console.log('产品变更:', this.value);
+        });
+
+        document.getElementById('statusSelect').addEventListener('change', function() {
+            console.log('状态变更:', this.value);
+        });
+
+        document.getElementById('dateSelect').addEventListener('change', function() {
+            console.log('日期变更:', this.value);
         });
     </script>
 </body>
